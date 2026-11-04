@@ -1,9 +1,9 @@
-// SKYNET: "haunter" refeito (o original sumiu da internet). Usado por SCP-106, Lewis The Ghost e Walrider.
-//   Habilidade special_haunter (na furia):
-//     arg1 = duracao do modo fantasma (atravessa paredes + brilho), arg2 = velocidade no modo fantasma,
-//     arg3 = aceleracao no modo fantasma, arg4 = duracao do susto (stun), arg5 = raio do susto
-//   Ao ativar: assusta (stun de fantasma) os inimigos no raio e o boss vira fantasma. Ao acabar, se ele ficou
-//   dentro de uma parede, volta para o ultimo lugar livre por onde passou.
+// SKYNET: "haunter" remade (the original disappeared from the internet). Used by SCP-106, Lewis The Ghost and Walrider.
+//   special_haunter ability (on rage):
+//     arg1 = ghost mode duration (goes through walls + glow), arg2 = ghost mode speed,
+//     arg3 = ghost mode acceleration, arg4 = scare (stun) duration, arg5 = scare radius
+//   On activation: scares (ghost stun) the enemies in the radius and the boss turns into a ghost. When it ends, if it is
+//   inside a wall, it goes back to the last free spot it passed through.
 #include <sourcemod>
 #include <sdktools>
 #include <tf2>
@@ -60,7 +60,7 @@ public void FF2_OnAbility2(int boss, const char[] plugin_name, const char[] abil
     float stun = FF2_GetAbilityArgumentFloat(boss, this_plugin_name, ability_name, 4, 3.0);
     float raio = FF2_GetAbilityArgumentFloat(boss, this_plugin_name, ability_name, 5, 1000.0);
 
-    // susto nos inimigos perto
+    // scare the nearby enemies
     float pb[3], pv[3];
     GetClientAbsOrigin(client, pb);
     int time = GetClientTeam(client);
@@ -102,7 +102,7 @@ bool Preso(int client, const float pos[3])
 
 public bool F_SoMundo(int ent, int mask, int client)
 {
-    return ent == 0 || ent > MaxClients;     // so parede/objetos, nao jogadores
+    return ent == 0 || ent > MaxClients;     // walls/objects only, not players
 }
 
 public Action T_Fantasma(Handle t, int uid)

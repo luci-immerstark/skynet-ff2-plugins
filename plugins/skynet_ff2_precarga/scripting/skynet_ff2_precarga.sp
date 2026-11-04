@@ -1,7 +1,7 @@
-// SKYNET FF2 Precarga: carrega os subplugins dos bosses (pasta freaks) no inicio do mapa.
-//   O FF2 Rewrite carrega esses plugins no meio do evento de inicio de rodada. Se um deles registra um gancho nesse
-//   mesmo evento enquanto ele esta acontecendo, a pilha de eventos do SourceMod desalinha e o servidor cai no proximo
-//   evento (crash em CStack<IGameEvent*>::push). Carregando antes, fora de qualquer evento, isso nao acontece.
+// SKYNET FF2 Preload: loads the boss subplugins (freaks folder) at the start of the map.
+//   FF2 Rewrite loads these plugins in the middle of the round start event. If one of them hooks that
+//   same event while it is happening, SourceMod's event stack gets misaligned and the server crashes on the next
+//   event (crash in CStack<IGameEvent*>::push). Loading them earlier, outside any event, avoids this.
 #include <sourcemod>
 #pragma semicolon 1
 #pragma newdecls required

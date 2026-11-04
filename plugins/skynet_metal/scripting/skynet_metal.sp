@@ -1,6 +1,6 @@
-// SKYNET Metal Regen: o Engineer ganha metal aos poucos (no FF2 ele passa a rodada correndo, sem tempo de buscar metal).
-//   Cvars: skynet_metal (1 liga), skynet_metal_qtd (10 por vez), skynet_metal_intervalo (1.0 s), skynet_metal_max (200).
-//   No FF2, o boss nao ganha.
+// SKYNET Metal Regen: the Engineer gains metal little by little (in FF2 he spends the round running, with no time to fetch metal).
+//   Cvars: skynet_metal (1 = on), skynet_metal_qtd (10 each time), skynet_metal_intervalo (1.0 s), skynet_metal_max (200).
+//   In FF2, the boss does not get it.
 #include <sourcemod>
 #include <sdktools>
 #include <tf2>
@@ -58,7 +58,7 @@ void Reinicia()
 
 public void OnMapEnd()
 {
-    g_hTimer = null;    // timers sem a flag de mapa continuam; este e recriado no OnConfigsExecuted
+    g_hTimer = null;    // timers without the map flag keep running; this one is recreated in OnConfigsExecuted
 }
 
 bool EhBoss(int c)

@@ -1,6 +1,6 @@
-// SKYNET FF2 Sem Arma: o boss nao pega arma do chao.
-// No TF2 a arma caida e pega com a tecla de chamar o Medic, que e a mesma tecla do rage do boss; por isso a tecla
-// nao e bloqueada. Em vez disso, arma caida perto de um boss vivo some antes que ele consiga pegar.
+// SKYNET FF2 No Weapon: the boss does not pick up weapons from the ground.
+// In TF2 a dropped weapon is picked up with the call-for-Medic key, which is the same key as the boss rage; that is why the key
+// is not blocked. Instead, a dropped weapon near a living boss disappears before it can pick it up.
 #include <sourcemod>
 #include <sdktools>
 #pragma semicolon 1

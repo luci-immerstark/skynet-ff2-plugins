@@ -1,4 +1,4 @@
-// SKYNET Bots de Teste: admins e moderadores colocam e tiram bots para testar (!bots ou menu de admin)
+// SKYNET Test Bots: admins and moderators add and remove bots for testing (!bots or admin menu)
 #include <sourcemod>
 #include <sdktools>
 #undef REQUIRE_PLUGIN
@@ -17,7 +17,7 @@ public Plugin myinfo =
 
 #define PREFIXO "TESTE"
 
-ConVar g_cvAtivos;      // quantos bots de teste existem (o Auto Reflect do Dodgeball pausa enquanto for > 0)
+ConVar g_cvAtivos;      // how many test bots exist (Dodgeball Auto Reflect pauses while it is > 0)
 int g_iSeq;
 TopMenu g_Menu;
 
@@ -145,7 +145,7 @@ void Colocar(int client, int pedidos)
         PrintToChat(client, "\x04[SKYNET]\x01 Servidor cheio: nao cabe mais bot.");
         return;
     }
-    g_cvAtivos.IntValue = Contar() + n;   // avisa o Auto Reflect do Dodgeball antes dos bots entrarem
+    g_cvAtivos.IntValue = Contar() + n;   // tells Dodgeball Auto Reflect before the bots join
     for (int k = 0; k < n; k++)
         ServerCommand("tf_bot_add 1 \"%s %d\"", PREFIXO, ++g_iSeq);
     ShowActivity2(client, "\x04[SKYNET]\x01 ", "colocou %d bot(s) de teste%s.", n, n < pedidos ? " (o servidor encheu)" : "");
@@ -165,7 +165,7 @@ void Tirar(int client)
     }
     ConVar cota = FindConVar("tf_bot_quota");
     if (cota != null)
-        cota.IntValue = cota.IntValue > n ? cota.IntValue - n : 0;   // senao o jogo coloca outros bots no lugar
+        cota.IntValue = cota.IntValue > n ? cota.IntValue - n : 0;   // otherwise the game puts other bots in their place
     g_cvAtivos.IntValue = 0;
     ShowActivity2(client, "\x04[SKYNET]\x01 ", "tirou %d bot(s) de teste.", n);
     LogAction(client, -1, "\"%L\" tirou %d bot(s) de teste", client, n);

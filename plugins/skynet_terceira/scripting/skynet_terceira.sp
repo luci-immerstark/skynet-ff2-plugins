@@ -1,5 +1,5 @@
-// SKYNET: !tp liga/desliga a camera em terceira pessoa; !fp volta para primeira pessoa.
-//   Usa a camera de provocacao do proprio jogo (SetForcedTauntCam), sem cheats. Volta sozinha a cada spawn.
+// SKYNET: !tp toggles the third-person camera; !fp goes back to first person.
+//   Uses the game's own taunt camera (SetForcedTauntCam), no cheats. Goes back by itself on every spawn.
 #include <sourcemod>
 #include <sdktools>
 #pragma semicolon 1

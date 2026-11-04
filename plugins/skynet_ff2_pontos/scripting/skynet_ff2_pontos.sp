@@ -1,9 +1,9 @@
-// SKYNET FF2 Pontos: pontuacao do ranking (HLstatsZ) do Freak Fortress 2, entregue no fim de cada rodada.
-//   Vitoria como boss: +30 para cada boss (dupla: cada um ganha 30; minions invocados nao contam).
-//   Vitoria contra o boss: +10 para cada jogador do time que venceu (que estava na rodada).
-//   Dano no boss: +1 a cada 1000 de dano (somado na rodada, entregue e mostrado no chat no fim).
-//   (A kill vale +1 direto no daemon do ranking.) Os pontos vao para o ranking pelas acoes ff2_boss_vitoria (30),
-//   ff2_vitoria (10) e ff2_dano (1, uma por cada 1000 de dano), registradas no log do jogo como as do proprio TF2.
+// SKYNET FF2 Points: Freak Fortress 2 ranking points (HLstatsZ), given at the end of each round.
+//   Win as boss: +30 for each boss (duo: each one gets 30; summoned minions do not count).
+//   Win against the boss: +10 for each player on the winning team (who was in the round).
+//   Damage to the boss: +1 per 1000 damage (added up over the round, given and shown in chat at the end).
+//   (A kill is worth +1 directly in the ranking daemon.) The points reach the ranking through the actions ff2_boss_vitoria (30),
+//   ff2_vitoria (10) and ff2_dano (1, one per 1000 damage), recorded in the game log like TF2's own.
 #include <sourcemod>
 #include <sdktools>
 #pragma semicolon 1
@@ -66,7 +66,7 @@ public void Ev_Inicio(Event e, const char[] nome, bool sem)
     }
     g_iTimeBoss = 0;
     g_bRodada = true;
-    CreateTimer(0.5, T_Marca, _, TIMER_FLAG_NO_MAPCHANGE);    // depois do FF2 montar os bosses
+    CreateTimer(0.5, T_Marca, _, TIMER_FLAG_NO_MAPCHANGE);    // after FF2 sets up the bosses
 }
 
 public Action T_Marca(Handle t)

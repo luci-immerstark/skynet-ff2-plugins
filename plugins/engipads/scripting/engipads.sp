@@ -102,7 +102,7 @@ public Plugin myinfo =
 };
 
 //Initialise gamedata to be used for getting/setting Teleporter pairs.
-void InitGamedata()	// SKYNET: sem arquivo de gamedata; posicao do m_hMatchingTeleporter medida no server_srv.so 64 bits
+void InitGamedata()	// SKYNET: no gamedata file; m_hMatchingTeleporter offset measured in the 64-bit server_srv.so
 {
 	strcopy(g_szOffsetStartProp, sizeof(g_szOffsetStartProp), "m_bMatchBuilding");
 	g_iOffsetMatchingTeleporter = 3468;

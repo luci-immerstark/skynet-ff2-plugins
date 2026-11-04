@@ -1,7 +1,7 @@
-// SKYNET Killstreak: todas as armas dos jogadores viram Professional Killstreak (contador de abates, brilho na arma e
-//   efeito nos olhos). Cada jogador escolhe o brilho e o efeito em !killstreak (ou !ks); a escolha fica salva.
-//   Quem nunca escolheu ganha um brilho e um efeito sorteados. No FF2 o boss nao ganha (as armas dele sao do boss).
-//   Os atributos vao pelo VScript do proprio TF2 (AddAttribute), porque o tf2attributes nao funciona em 64 bits.
+// SKYNET Killstreak: every player weapon becomes Professional Killstreak (kill counter, weapon sheen and
+//   eye effect). Each player picks the sheen and the effect in !killstreak (or !ks); the choice is saved.
+//   Players who never chose get a random sheen and effect. In FF2 the boss does not get it (its weapons belong to the boss).
+//   Attributes go through TF2's own VScript (AddAttribute), because tf2attributes does not work on 64-bit.
 //   Cvar: skynet_killstreak (1 liga).
 #include <sourcemod>
 #include <sdktools>
@@ -82,7 +82,7 @@ bool EhBoss(int c)
 
 public void Ev_Armas(Event e, const char[] nome, bool sem)
 {
-    RequestFrame(F_Aplica, e.GetInt("userid"));     // depois que os outros plugins trocam as armas
+    RequestFrame(F_Aplica, e.GetInt("userid"));     // after the other plugins swap the weapons
 }
 
 public void F_Aplica(int uid)

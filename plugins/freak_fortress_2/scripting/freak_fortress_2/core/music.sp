@@ -236,7 +236,7 @@ void Music_PlaySong(const int[] clients, int numClients, SoundEnum sound = {}, i
 		strcopy(sample2, sizeof(sample2), sound.Sound);
 		ForwardOld_OnMusic(sample2, time, songName, songArtist, clients[0]);
 
-		static ConVar skynetVolume;	// SKYNET: volume das musicas dos bosses
+		static ConVar skynetVolume;	// SKYNET: boss music volume
 		if(!skynetVolume)
 			skynetVolume = CreateConVar("ff2_skynet_music_volume", "1.5", "SKYNET: multiplica o volume das musicas dos bosses (1 = original)", _, true, 0.1, true, 4.0);
 		sound.Volume *= skynetVolume.FloatValue;

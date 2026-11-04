@@ -1,8 +1,8 @@
-// SKYNET: substituto da extensao TF2Items (a versao 64 bits derruba o servidor).
-// Mesmas funcoes, feitas em SourcePawn: cria a arma do jeito que o FF2 Rewrite ja faz quando nao ha TF2Items
-// (entidade + indice/qualidade/nivel). v2: os atributos vao pelo VScript do proprio TF2 (AddAttribute), com o nome
-// tirado do items_game.txt do servidor (o tf2attributes nao funciona em servidor 64 bits).
-// Itens de construir/sabotar (builder, sapper, PDAs) NAO sao criados: criados assim eles derrubam o jogo dos jogadores.
+// SKYNET: replacement for the TF2Items extension (the 64-bit build crashes the server).
+// Same functions, written in SourcePawn: creates the weapon the way FF2 Rewrite already does when TF2Items is missing
+// (entity + index/quality/level). v2: attributes go through TF2's own VScript (AddAttribute), with the name
+// taken from the server's items_game.txt (tf2attributes does not work on a 64-bit server).
+// Build/sap items (builder, sapper, PDAs) are NOT created: created this way they crash the players' game.
 #if defined _tf2items_included
  #endinput
 #endif
@@ -61,7 +61,7 @@ stock int TF2Items_GetClassname(Handle item, char[] dest, int size)
     return strlen(dest);
 }
 
-// o TF2 troca alguns nomes genericos pelo da classe; aqui faz o mesmo para os casos comuns
+// TF2 swaps some generic names for the class-specific one; this does the same for the common cases
 stock void TF2Items_Shim_Classe(int client, char[] classname, int size)
 {
     TFClassType classe = TF2_GetPlayerClass(client);

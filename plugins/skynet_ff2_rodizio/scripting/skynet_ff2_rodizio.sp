@@ -1,9 +1,9 @@
-// SKYNET FF2 Rodizio: escolhe o boss da rodada sem repetir os ultimos N (padrao 10).
-//   Na hora em que o FF2 sorteia o boss, troca por um sorteio entre os bosses que NAO sairam nas ultimas N rodadas.
-//   Depois de N rodadas o boss volta para o sorteio. Escolha forcada por admin (ff2_makeboss / ff2_override) nao e mexida.
-//   O historico fica salvo em data/skynet_ff2_rodizio.txt (vale tambem depois de trocar mapa ou reiniciar).
-//   !rodizio mostra quais bosses estao fora do sorteio agora.
-// 1.1.0: boss duplo (com parceiro) so entra no sorteio com skynet_ff2_rodizio_duo_min jogadores ou mais (padrao 21).
+// SKYNET FF2 Rotation: picks the round's boss without repeating the last N (default 10).
+//   When FF2 draws the boss, swaps it for a draw among the bosses that did NOT come up in the last N rounds.
+//   After N rounds the boss goes back into the draw. A choice forced by an admin (ff2_makeboss / ff2_override) is left alone.
+//   The history is saved in data/skynet_ff2_rodizio.txt (it also holds after a map change or restart).
+//   !rodizio shows which bosses are out of the draw right now.
+// 1.1.0: a double boss (with a partner) only enters the draw with skynet_ff2_rodizio_duo_min players or more (default 21).
 #include <sourcemod>
 #include <cfgmap>
 #include <ff2r>
@@ -20,8 +20,8 @@ public Plugin myinfo =
 };
 
 ConVar g_cvRodadas, g_cvDuoMin;
-ArrayList g_Historico;          // arquivos dos bosses que sairam, o mais recente no fim
-StringMap g_NestaRodada;        // ja gravados nesta rodada (o FF2 avisa a criacao do boss mais de uma vez)
+ArrayList g_Historico;          // files of the bosses that came up, the most recent at the end
+StringMap g_NestaRodada;        // already recorded this round (FF2 reports the boss creation more than once)
 char g_Arquivo[PLATFORM_MAX_PATH];
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
@@ -81,7 +81,7 @@ public void Ev_Rodada(Event e, const char[] nome, bool sem)
     g_NestaRodada.Clear();
 }
 
-// o boss foi criado de verdade: entra no historico
+// the boss was really created: goes into the history
 public void FF2R_OnBossCreated(int client, BossData cfg, bool setup)
 {
     char arq[64];
@@ -92,10 +92,10 @@ public void FF2R_OnBossCreated(int client, BossData cfg, bool setup)
         return;
     g_NestaRodada.SetValue(arq, 1);
     if (client > 0 && client <= MaxClients && IsClientInGame(client))
-        LogMessage("boss criado: %s (jogador %N)", arq, client);   // para o relatorio de testes
+        LogMessage("boss criado: %s (jogador %N)", arq, client);   // for the test report
     bool parceiro;
     if (view_as<ConfigMap>(cfg).GetBool("blocked", parceiro, false) && parceiro)
-        return;                         // parceiro de dupla (nao sai sozinho): nao conta como rodada
+        return;                         // duo partner (never comes up alone): does not count as a round
     int i = g_Historico.FindString(arq);
     if (i != -1)
         g_Historico.Erase(i);
@@ -103,7 +103,7 @@ public void FF2R_OnBossCreated(int client, BossData cfg, bool setup)
     Salva();
 }
 
-// mesmo criterio do FF2 Rewrite para um boss poder sair no sorteio
+// same rule FF2 Rewrite uses for a boss to be drawable
 bool PodeSair(ConfigMap cfg)
 {
     bool b;
@@ -142,7 +142,7 @@ bool EhDuplo(ConfigMap cfg)
     return cfg.Get("companion", tmp, sizeof(tmp)) > 0;
 }
 
-// ultima posicao em que o boss saiu, contando de tras (0 = saiu na ultima rodada); -1 = nao saiu recentemente
+// last position the boss came up in, counting from the end (0 = came up last round); -1 = has not come up recently
 int Recencia(const char[] arq)
 {
     int i = g_Historico.FindString(arq);
@@ -158,7 +158,7 @@ public Action FF2_OnSpecialSelected(int boss, int &special, char[] specialName, 
     ConfigMap orig = view_as<ConfigMap>(FF2R_GetSpecialData(special));
     bool raid;
     if (orig != null && orig.GetBool("raidboss", raid, false) && raid)
-        return Plugin_Continue;         // rodada especial de raid: deixa com o FF2
+        return Plugin_Continue;         // special raid round: leave it to FF2
     int total = FF2R_GetSpecialCount();
     bool duoOk = Jogadores() >= g_cvDuoMin.IntValue;
     ArrayList livres = new ArrayList(), todos = new ArrayList();
@@ -170,7 +170,7 @@ public Action FF2_OnSpecialSelected(int boss, int &special, char[] specialName, 
         if (cfg == null || !PodeSair(cfg) || !cfg.Get("filename", arq, sizeof(arq)) || !arq[0])
             continue;
         if (!duoOk && EhDuplo(cfg))
-            continue;                   // poucos jogadores: sem boss duplo
+            continue;                   // few players: no double boss
         todos.Push(s);
         int r = Recencia(arq);
         if (r == -1 || r >= n)
@@ -186,7 +186,7 @@ public Action FF2_OnSpecialSelected(int boss, int &special, char[] specialName, 
     if (livres.Length)
         escolhido = livres.Get(GetURandomInt() % livres.Length);
     else if (maisAntigo != -1)
-        escolhido = maisAntigo;         // poucos bosses na lista: vai o que saiu ha mais tempo
+        escolhido = maisAntigo;         // few bosses in the list: the one that came up longest ago goes
     int livresN = livres.Length, todosN = todos.Length;
     delete livres;
     delete todos;
@@ -199,7 +199,7 @@ public Action FF2_OnSpecialSelected(int boss, int &special, char[] specialName, 
     cfg.Get("filename", arq, sizeof(arq));
     LogMessage("rodizio: boss sorteado %s (%d livres de %d)", arq, livresN, todosN);
     special = escolhido;
-    specialName[0] = '\0';              // vazio: o FF2 usa o numero do boss, nao o nome
+    specialName[0] = '\0';              // empty: FF2 uses the boss number, not the name
     return Plugin_Changed;
 }
 

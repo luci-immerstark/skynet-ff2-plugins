@@ -1,5 +1,5 @@
-// SKYNET: aviso colorido no chat quando um jogador entra no servidor, com o pais de onde ele conectou.
-//   So na primeira entrada (troca de mapa nao repete). Teste no console do servidor: skynet_entrada_teste <ip>
+// SKYNET: colored chat notice when a player joins the server, with the country they connected from.
+//   Only on the first join (map changes do not repeat it). Test from the server console: skynet_entrada_teste <ip>
 #include <sourcemod>
 #include <geoip>
 
@@ -15,7 +15,7 @@ public Plugin myinfo =
     url         = ""
 };
 
-// pais com a preposicao certa em portugues; os outros saem com o nome em ingles ("de Germany")
+// country with the right Portuguese preposition; the others come out with the English name ("de Germany")
 static const char CODIGOS[][] = {
     "BR", "AR", "CL", "UY", "PY", "PE", "BO", "CO", "VE", "EC",
     "MX", "US", "CA", "PT", "ES", "FR", "DE", "IT", "GB", "RU",
@@ -29,12 +29,12 @@ static const char NOMES[][] = {
     "de El Salvador", "de Honduras", "da Nicarágua", "de Porto Rico", "da Bélgica", "da Suíça", "da Suécia", "da Irlanda", "da Ucrânia", "da Turquia"
 };
 
-ArrayList g_Avisados;   // userids que ja foram anunciados (a troca de mapa nao anuncia de novo)
+ArrayList g_Avisados;   // userids already announced (map changes do not announce again)
 
 public void OnPluginStart()
 {
     g_Avisados = new ArrayList();
-    for (int i = 1; i <= MaxClients; i++)   // quem ja estava no servidor quando o plugin carregou nao e anunciado
+    for (int i = 1; i <= MaxClients; i++)   // players already on the server when the plugin loaded are not announced
     {
         if (IsClientInGame(i) && !IsFakeClient(i))
             g_Avisados.Push(GetClientUserId(i));

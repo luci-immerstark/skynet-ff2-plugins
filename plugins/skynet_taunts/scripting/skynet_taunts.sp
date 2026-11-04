@@ -130,7 +130,7 @@ void ShowTauntMenu(int client, int first)
     Menu menu = new Menu(Handler_Taunt);
     menu.SetTitle("Taunts (as da sua classe vêm primeiro)");
     char info[8];
-    // Passo 0: taunts exclusivas da classe. Passo 1: taunts de todas as classes.
+    // Pass 0: class-specific taunts. Pass 1: all-class taunts.
     for (int passo = 0; passo < 2; passo++)
     {
         for (int i = 0; i < g_Count; i++)
@@ -194,8 +194,8 @@ void DoTaunt(int client, int idx)
     }
     g_Next[client] = agora + g_cvCooldown.FloatValue;
 
-    // Usa o proprio sistema de scripts do jogo (VScript): cria um item temporario com o
-    // codigo da taunt, manda o jogador provocar e apaga o item em seguida.
+    // Uses the game's own scripting system (VScript): creates a temporary item with the
+    // taunt's code, makes the player taunt and deletes the item right after.
     char code[1024];
     FormatEx(code, sizeof(code),
         "local w=Entities.CreateByClassname(\"tf_weapon_bat\");local a=self.GetActiveWeapon();self.StopTaunt(true);self.RemoveCond(7);w.DispatchSpawn();NetProps.SetPropInt(w,\"m_AttributeManager.m_Item.m_iItemDefinitionIndex\",%d);NetProps.SetPropBool(w,\"m_AttributeManager.m_Item.m_bInitialized\",true);NetProps.SetPropBool(w,\"m_bForcePurgeFixedupStrings\",true);NetProps.SetPropEntity(self,\"m_hActiveWeapon\",w);NetProps.SetPropInt(self,\"m_iFOV\",0);self.HandleTauntCommand(0);NetProps.SetPropEntity(self,\"m_hActiveWeapon\",a);w.Kill()",

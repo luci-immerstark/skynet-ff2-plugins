@@ -1,4 +1,4 @@
-// SKYNET Taunt Crit: quem termina uma taunt ganha critico por 5 segundos. Um por vez: taunt durante o critico nao soma.
+// SKYNET Taunt Crit: whoever finishes a taunt gets crits for 5 seconds. One at a time: taunting during the crits does not stack.
 #include <sourcemod>
 #include <tf2>
 #include <tf2_stocks>
@@ -60,9 +60,9 @@ public void TF2_OnConditionRemoved(int client, TFCond cond)
         return;
     float agora = GetGameTime();
     if (agora - g_fInicio[client] < g_cvMin.FloatValue)
-        return;                 // taunt cancelada logo no comeco
+        return;                 // taunt cancelled right at the start
     if (agora < g_fFim[client])
-        return;                 // ja esta com critico: um por vez
+        return;                 // already has crits: one at a time
     float t = g_cvTempo.FloatValue;
     TF2_AddCondition(client, TFCond_CritCanteen, t);
     g_fFim[client] = agora + t;

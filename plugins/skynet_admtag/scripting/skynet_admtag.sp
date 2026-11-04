@@ -11,9 +11,9 @@ public Plugin myinfo =
     url = "https://github.com/luci-immerstark/skynet-sourcemod-plugins"
 };
 
-// [ADM]: quem pode banir (ou e root). [MOD]: quem tem o acesso basico de admin mas nao bane (grupo Moderador).
-// [VIP]: quem so tem a vaga reservada (flag a, grupo VIP: boosters do Discord).
-//   Da pra mudar quem recebe cada tag com overrides em admin_overrides.cfg: "sm_tag_adm", "sm_tag_mod" e "sm_tag_vip".
+// [ADM]: whoever can ban (or is root). [MOD]: whoever has basic admin access but cannot ban (Moderator group).
+// [VIP]: whoever only has the reserved slot (flag a, VIP group: Discord boosters).
+//   You can change who gets each tag with overrides in admin_overrides.cfg: "sm_tag_adm", "sm_tag_mod" and "sm_tag_vip".
 #define COR_ADM "FFD700"
 #define COR_MOD "4FC3F7"
 #define COR_VIP "B266FF"
@@ -59,7 +59,7 @@ public Action OnSayText2(UserMsg msg_id, BfRead msg, const int[] players, int pl
     return Plugin_Handled;
 }
 
-// 3 = [ADM] (pode banir), 2 = [MOD] (acesso basico de admin), 1 = [VIP] (vaga reservada, grupo VIP), 0 = sem tag
+// 3 = [ADM] (can ban), 2 = [MOD] (basic admin access), 1 = [VIP] (reserved slot, VIP group), 0 = no tag
 int Tipo(int client)
 {
     if (CheckCommandAccess(client, "sm_tag_adm", ADMFLAG_BAN, true))
@@ -71,7 +71,7 @@ int Tipo(int client)
     return 0;
 }
 
-// Mesmo prefixo que o jogo usaria (morto, time, espectador, coach)
+// Same prefix the game would use (dead, team, spectator, coach)
 void Prefixo(const char[] fmt, char[] pre, int len)
 {
     if (StrContains(fmt, "Team_Dead") != -1)     strcopy(pre, len, "*DEAD*(TEAM) ");

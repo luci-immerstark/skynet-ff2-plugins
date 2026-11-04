@@ -141,7 +141,7 @@ void DHook_MapStart()
 	if(GetCaptureValue)
 		GetCaptureValue.HookGamerules(Hook_Post, DHook_GetCaptureValue);
 	
-	static bool backupHooked;	// SKYNET: antes isto era chamado a cada mapa e duplicava o gancho
+	static bool backupHooked;	// SKYNET: this used to be called every map and duplicated the hook
 	if(!RoundRespawn || RoundRespawn.HookGamerules(Hook_Pre, DHook_RoundRespawn) == INVALID_HOOK_ID)
 	{
 		if(!backupHooked)

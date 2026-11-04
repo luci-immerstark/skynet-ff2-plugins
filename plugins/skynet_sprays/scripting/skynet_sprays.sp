@@ -1,7 +1,7 @@
-// SKYNET Sprays: moderacao de sprays (no lugar do Super Spray Handler, que nao tem codigo e e antigo).
-//   !quemspray / sm_spraytrace  - mire num spray: mostra de quem e e ha quanto tempo foi feito (admins/moderadores)
-//   sm_sprayban <jogador>       - bloqueia os sprays do jogador (fica salvo; o spray atual some na troca de mapa)
-//   sm_sprayunban <jogador>     - libera de novo
+// SKYNET Sprays: spray moderation (replacing Super Spray Handler, which is old and has no source).
+//   !quemspray / sm_spraytrace  - aim at a spray: shows who made it and how long ago (admins/moderators)
+//   sm_sprayban <player>        - blocks the player's sprays (saved; the current spray disappears on map change)
+//   sm_sprayunban <player>      - allows them again
 #include <sourcemod>
 #include <sdktools>
 #include <clientprefs>

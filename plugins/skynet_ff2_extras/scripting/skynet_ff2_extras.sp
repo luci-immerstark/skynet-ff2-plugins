@@ -1,33 +1,33 @@
-// SKYNET FF2 Extras: som de vitoria/derrota, melee sempre critico, escudos seguram o 1o golpe do boss e stomp no boss
-// 1.0.1: no inicio de cada rodada o FF2 troca quase todo mundo de time ao mesmo tempo; os avisos disso (entrou no time /
-//   trocou de classe) iam para todos os jogadores no mesmo instante e estouravam o pacote ("Buffer overflow in net message").
-//   Agora esses dois avisos nao sao mais enviados aos jogadores (o servidor continua registrando no log).
-// 1.0.2: stomp corrigido. Quem cai na cabeca do boss nao toma mais o dano de queda; o dano vai para o boss.
-//   O stomp e detectado tanto pelo toque quanto pelo dano de queda em cima do boss.
-// 1.1.0: stomp refeito: detecta a aterrissagem na cabeca (todo tick), vale nos dois sentidos (jogador no boss e boss no
-//   jogador), usa os valores do FF2 Rewrite (boss toma 585 e quem pisa quica 450 para cima; o boss pisando mata), som proprio
-//   e o dano de queda de quem pisa e cancelado. Sniper: tiro com a mira (qualquer carga) e sempre critico.
-// 1.1.1: escalar parede com o melee (Demoman, Spy, Sniper) feito aqui, igual ao do FF2/VSH (o Medic continua pela config
-//   do FF2, onde ja funcionava).
-// 1.1.2: Engineer e Heavy tambem escalam parede com o melee.
-// 1.1.3: anuncia a biblioteca "goomba" (o boss Blitzkrieg exige o plugin de goomba; o stomp daqui faz esse papel). O som do stomp e pre-carregado tambem quando o plugin e recarregado no meio do mapa.
-// 1.1.4: som do stomp mais alto: arquivo novo normalizado (goomba_stomp2.wav) e, para quem pisou e quem foi pisado,
-//   o som toca direto no ouvido (sem perder volume com a distancia); os outros ouvem pela posicao.
-// 1.1.5: som do Mario 14x mais alto (com limitador, sem estourar) em goomba_stomp3.wav e confete saindo da cabeca de quem
-//   foi pisado (particula "bday_confetti" do proprio TF2; skynet_ff2_stomp_confete troca o efeito ou desliga com "").
-// 1.1.8: stomp do boss em quem tem escudo (Demoman, Darwin's) ou Razorback: o escudo quebra e segura o stomp como segura
-//   o golpe do boss (metade do dano e nao morre), em vez de matar direto.
-// 1.1.9: a uber normal da Medigun tambem da critico (para o Medic e para quem ele ubera, enquanto durar a uber)
-//   e escalar parede com o melee custa 30 de vida (era 15).
-// 1.2.0: bosses da lista skynet_ff2_escalar_bosses (o HHH) tambem escalam parede com o melee, sem perder vida
-//   (dano em si mesmo daria rage ao boss).
-// 1.2.1: a escalada com 30 de custo pulava mais alto (o dano em si mesmo empurra o jogador e o empurrao cresce com o
-//   dano). Agora so os primeiros 15 empurram (a altura de antes); o resto do custo sai sem empurrao. Vale tambem para a
-//   escalada do Medic, que vem do FF2 (config de armas com 15): o Extras cobra a diferenca sem empurrao.
-// 1.2.2: o boss leva menos empurrao de dano (tiro critico de sniper, sentry, explosao critica...): atributo do TF2
-//   "damage force reduction" no boss (skynet_ff2_boss_empurrao, 0.5 = metade do empurrao normal).
-// 1.2.3: golpe corpo a corpo do boss em construcao do Engineer (sentry, dispenser, teleporte) tira 195 fixo
-//   (skynet_ff2_boss_predio; sem critico por cima).
+// SKYNET FF2 Extras: win/loss sound, melee always crits, shields hold the boss's 1st hit and stomping the boss
+// 1.0.1: at the start of each round FF2 moves almost everyone to another team at the same time; the notices for it (joined team /
+//   changed class) went to every player at the same instant and overflowed the packet ("Buffer overflow in net message").
+//   Now those two notices are no longer sent to players (the server still records them in the log).
+// 1.0.2: stomp fixed. Whoever lands on the boss's head no longer takes fall damage; the damage goes to the boss.
+//   The stomp is detected both by touch and by fall damage on top of the boss.
+// 1.1.0: stomp redone: detects landing on the head (every tick), works both ways (player on boss and boss on
+//   player), uses FF2 Rewrite's values (boss takes 585 and the stomper bounces 450 up; the boss stomping kills), own sound
+//   and the stomper's fall damage is cancelled. Sniper: scoped shot (any charge) always crits.
+// 1.1.1: melee wall climbing (Demoman, Spy, Sniper) done here, same as FF2/VSH (the Medic still goes through the FF2
+//   config, where it already worked).
+// 1.1.2: Engineer and Heavy also climb walls with melee.
+// 1.1.3: announces the "goomba" library (the Blitzkrieg boss requires the goomba plugin; the stomp here does that job). The stomp sound is also precached when the plugin is reloaded mid-map.
+// 1.1.4: louder stomp sound: new normalized file (goomba_stomp2.wav) and, for the stomper and the stomped,
+//   the sound plays right in the ear (no volume loss with distance); everyone else hears it by position.
+// 1.1.5: Mario sound 14x louder (with a limiter, no clipping) in goomba_stomp3.wav and confetti coming out of the head of whoever
+//   got stomped (TF2's own "bday_confetti" particle; skynet_ff2_stomp_confete swaps the effect or turns it off with "").
+// 1.1.8: boss stomp on someone with a shield (Demoman, Darwin's) or Razorback: the shield breaks and holds the stomp the same way it holds
+//   the boss's hit (half the damage and no death), instead of killing outright.
+// 1.1.9: the Medigun's normal uber also gives crits (to the Medic and to whoever he ubers, while the uber lasts)
+//   and melee wall climbing costs 30 health (it was 15).
+// 1.2.0: bosses in the skynet_ff2_escalar_bosses list (the HHH) also climb walls with melee, without losing health
+//   (self-damage would give the boss rage).
+// 1.2.1: climbing at a cost of 30 jumped higher (self-damage pushes the player and the push grows with the
+//   damage). Now only the first 15 push (the old height); the rest of the cost is taken without push. Also applies to the
+//   Medic's climb, which comes from FF2 (weapon config with 15): Extras charges the difference without push.
+// 1.2.2: the boss takes less knockback from damage (crit sniper shot, sentry, crit explosion...): TF2 attribute
+//   "damage force reduction" on the boss (skynet_ff2_boss_empurrao, 0.5 = half the normal knockback).
+// 1.2.3: a boss melee hit on an Engineer building (sentry, dispenser, teleporter) deals a fixed 195
+//   (skynet_ff2_boss_predio; no crit on top).
 #include <sourcemod>
 #include <sdktools>
 #include <sdkhooks>
@@ -46,7 +46,7 @@ public Plugin myinfo =
     url         = "https://github.com/luci-immerstark/skynet-sourcemod-plugins"
 };
 
-native Handle FF2R_GetBossData(int client);   // FF2 Rewrite: != null se o jogador e boss
+native Handle FF2R_GetBossData(int client);   // FF2 Rewrite: != null if the player is a boss
 
 #define SOM_STOMP "skynet/goomba_stomp3.wav"
 
@@ -57,7 +57,7 @@ float g_fProxAtq[MAXPLAYERS + 1];
 ConVar g_cvEscalar, g_cvEscalarDano, g_cvConfete, g_cvUberCrit, g_cvEscalarBoss, g_cvBossEmpurrao, g_cvBossPredio;
 bool g_bCritUber[MAXPLAYERS + 1];
 bool g_bEscalando;
-#define ESCALAR_EMPURRA 15.0   // parte do custo da escalada que empurra (a altura original)
+#define ESCALAR_EMPURRA 15.0   // part of the climb cost that pushes (the original height)
 float g_fVz[MAXPLAYERS + 1];
 GlobalForward g_fwStomp;
 float g_fUltimoStomp[MAXPLAYERS + 1];
@@ -103,7 +103,7 @@ public void OnPluginStart()
         while ((e = FindEntityByClassname(e, predios[k])) != -1)
             SDKHook(e, SDKHook_OnTakeDamage, OnDanoPredio);
     }
-    PrecacheSound(SOM_STOMP, true);     // recarregado no meio do mapa: o som ja fica pronto
+    PrecacheSound(SOM_STOMP, true);     // reloaded mid-map: the sound is ready right away
     PrecacheConfete();
 }
 
@@ -123,7 +123,7 @@ public void OnMapStart()
     PrecacheConfete();
 }
 
-// a particula precisa estar na tabela "ParticleEffectNames" para os jogadores verem
+// the particle has to be in the "ParticleEffectNames" table for players to see it
 void PrecacheConfete()
 {
     char efeito[64];
@@ -172,7 +172,7 @@ bool EhBoss(int c)
     return c > 0 && c <= MaxClients && IsClientInGame(c) && FF2Ativo() && FF2R_GetBossData(c) != null;
 }
 
-// ---------------------------------------------------------------- avisos de troca de time/classe so no servidor
+// ---------------------------------------------------------------- team/class change notices on the server only
 public Action Ev_Silencia(Event e, const char[] nome, bool sem)
 {
     if (g_cvSilencia.BoolValue)
@@ -180,8 +180,8 @@ public Action Ev_Silencia(Event e, const char[] nome, bool sem)
     return Plugin_Continue;
 }
 
-// ---------------------------------------------------------------- som no fim da rodada
-// O FF2 bloqueia a musica normal do TF2 e so toca a fala do boss (que nao sai quando o boss morre).
+// ---------------------------------------------------------------- end-of-round sound
+// FF2 blocks TF2's normal music and only plays the boss voice line (which does not play when the boss dies).
 public void Ev_FimRodada(Event e, const char[] nome, bool sem)
 {
     if (!g_cvSom.BoolValue || !FF2Ativo())
@@ -201,7 +201,7 @@ public void Ev_FimRodada(Event e, const char[] nome, bool sem)
     }
 }
 
-// ---------------------------------------------------------------- golpe do boss em construcao: dano fixo
+// ---------------------------------------------------------------- boss hit on a building: fixed damage
 public void OnEntityCreated(int entity, const char[] classname)
 {
     if (StrEqual(classname, "obj_sentrygun") || StrEqual(classname, "obj_dispenser") || StrEqual(classname, "obj_teleporter"))
@@ -222,7 +222,7 @@ public Action OnDanoPredio(int victim, int &attacker, int &inflictor, float &dam
     return Plugin_Changed;
 }
 
-// ---------------------------------------------------------------- boss leva menos empurrao de dano
+// ---------------------------------------------------------------- boss takes less knockback from damage
 public void FF2R_OnBossCreated(int client, any cfg, bool setup)
 {
     if (client > 0 && client <= MaxClients)
@@ -247,7 +247,7 @@ public Action T_Empurrao(Handle t, int uid)
     return Plugin_Stop;
 }
 
-// ---------------------------------------------------------------- uber normal da Medigun da critico junto
+// ---------------------------------------------------------------- the Medigun's normal uber also gives crits
 public void TF2_OnConditionAdded(int client, TFCond cond)
 {
     if (cond != TFCond_Ubercharged || !g_cvUberCrit.BoolValue || !FF2Ativo() || EhBoss(client))
@@ -269,7 +269,7 @@ public void TF2_OnConditionRemoved(int client, TFCond cond)
     }
 }
 
-// ---------------------------------------------------------------- melee sempre critico (menos o boss)
+// ---------------------------------------------------------------- melee always crits (except the boss)
 public Action TF2_CalcIsAttackCritical(int client, int weapon, char[] weaponname, bool &result)
 {
     if (!g_cvCrit.BoolValue || result || !FF2Ativo() || EhBoss(client))
@@ -282,8 +282,8 @@ public Action TF2_CalcIsAttackCritical(int client, int weapon, char[] weaponname
     return Plugin_Continue;
 }
 
-// ---------------------------------------------------------------- Razorback do Sniper: segura 1 golpe do boss e some
-// O FF2 ja bloqueia o golpe com o Razorback; o jogo deixaria ele recarregar e bloquear de novo. Aqui ele quebra de vez.
+// ---------------------------------------------------------------- Sniper's Razorback: holds 1 boss hit and disappears
+// FF2 already blocks the hit with the Razorback; the game would let it recharge and block again. Here it breaks for good.
 public void Ev_Bloqueio(Event e, const char[] nome, bool sem)
 {
     int v = e.GetInt("blocker_entindex");
@@ -308,7 +308,7 @@ public void F_TiraRazor(int uid)
     }
 }
 
-// ---------------------------------------------------------------- escudos seguram o 1o golpe do boss
+// ---------------------------------------------------------------- shields hold the boss's 1st hit
 int AchaRazor(int client)
 {
     int e = -1;
@@ -351,11 +351,11 @@ public Action OnDano(int victim, int &attacker, int &inflictor, float &damage, i
     return Plugin_Changed;
 }
 
-// ---------------------------------------------------------------- sniper critico + queda em cima de alguem
+// ---------------------------------------------------------------- sniper crits + falling on someone
 public Action OnDanoPre(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon,
                         float damageForce[3], float damagePosition[3], int damagecustom)
 {
-    // escalada do Medic feita pelo FF2 (15 de dano em si mesmo, DMG_CLUB): cobra a diferenca ate o custo do Extras
+    // Medic climb done by FF2 (15 self-damage, DMG_CLUB): charges the difference up to the Extras cost
     if (!g_bEscalando && victim == attacker && victim == inflictor && damagetype == DMG_CLUB && damage == ESCALAR_EMPURRA
         && g_cvEscalar.BoolValue && g_cvEscalarDano.FloatValue > ESCALAR_EMPURRA && TF2_GetPlayerClass(victim) == TFClass_Medic && !EhBoss(victim))
         RequestFrame(F_EscalaMedic, GetClientUserId(victim));
@@ -366,7 +366,7 @@ public Action OnDanoPre(int victim, int &attacker, int &inflictor, float &damage
         if (GetGameTime() - g_fUltimoStomp[victim] < 0.5)
         {
             damage = 0.0;
-            return Plugin_Handled;          // acabou de pisar em alguem: sem dano de queda
+            return Plugin_Handled;          // just stomped someone: no fall damage
         }
         int alvo = Abaixo(victim);
         if (alvo && PodeStomp(victim, alvo))
@@ -375,7 +375,7 @@ public Action OnDanoPre(int victim, int &attacker, int &inflictor, float &damage
             DataPack dp = new DataPack();
             dp.WriteCell(GetClientUserId(victim));
             dp.WriteCell(GetClientUserId(alvo));
-            RequestFrame(F_Stomp, dp);      // o stomp sai no proximo frame, fora deste dano
+            RequestFrame(F_Stomp, dp);      // the stomp happens on the next frame, outside this damage
             damage = 0.0;
             return Plugin_Handled;
         }
@@ -401,9 +401,9 @@ public Action OnDanoPre(int victim, int &attacker, int &inflictor, float &damage
     return Plugin_Continue;
 }
 
-// ---------------------------------------------------------------- stomp (goomba): cair na cabeca de alguem
-// Jogador no boss: o boss toma 585 (valor do FF2 Rewrite) e quem pisou quica para cima.
-// Boss no jogador: o jogador morre (vida dele + 50), o boss nao quica.
+// ---------------------------------------------------------------- stomp (goomba): landing on someone's head
+// Player on boss: the boss takes 585 (FF2 Rewrite value) and the stomper bounces up.
+// Boss on player: the player dies (their health + 50), the boss does not bounce.
 
 public void OnPlayerRunCmdPost(int client, int buttons, int impulse, const float vel[3], const float angles[3], int weapon,
                                int subtype, int cmdnum, int tickcount, int seed, const int mouse[2])
@@ -430,7 +430,7 @@ public void OnPlayerRunCmdPost(int client, int buttons, int impulse, const float
     }
     if (!g_bNoAr[client])
         return;
-    g_bNoAr[client] = false;                // acabou de aterrissar
+    g_bNoAr[client] = false;                // just landed
     if (g_fVz[client] > -g_cvStompVel.FloatValue)
         return;
     int alvo = Abaixo(client);
@@ -438,7 +438,7 @@ public void OnPlayerRunCmdPost(int client, int buttons, int impulse, const float
         Stomp(client, alvo);
 }
 
-// ---------------------------------------------------------------- escalar parede com o melee (igual ao FF2/VSH)
+// ---------------------------------------------------------------- melee wall climbing (same as FF2/VSH)
 void Golpe(int client)
 {
     int arma = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
@@ -507,7 +507,7 @@ void Escalar(int client)
         TR_GetPlaneNormal(tr, normal);
         GetVectorAngles(normal, normal);
         TR_GetEndPosition(fim, tr);
-        ok = (normal[0] < 30.0 || normal[0] > 330.0) && GetVectorDistance(pos, fim, true) < 10000.0;   // parede de pe, a ate 100 unidades
+        ok = (normal[0] < 30.0 || normal[0] > 330.0) && GetVectorDistance(pos, fim, true) < 10000.0;   // upright wall, within 100 units
     }
     delete tr;
     if (!ok)
@@ -540,7 +540,7 @@ public void F_EscalaMedic(int uid)
     }
 }
 
-// inimigo logo abaixo dos pes (o "chao" e a cabeca dele)
+// enemy right below the feet (the "floor" is their head)
 int Abaixo(int client)
 {
     int chao = GetEntPropEnt(client, Prop_Send, "m_hGroundEntity");
@@ -567,7 +567,7 @@ bool PodeStomp(int atk, int vit)
 {
     if (!FF2Ativo() || !IsPlayerAlive(atk) || !IsPlayerAlive(vit) || GetClientTeam(atk) == GetClientTeam(vit))
         return false;
-    return EhBoss(atk) != EhBoss(vit);      // so jogador x boss ou boss x jogador
+    return EhBoss(atk) != EhBoss(vit);      // only player x boss or boss x player
 }
 
 public void F_Stomp(DataPack dp)
@@ -588,9 +588,9 @@ bool Stomp(int atk, int vit, bool agendado = false)
     if (!agendado && agora - g_fUltimoStomp[atk] < 0.5)
         return false;
 
-    float mult = 1.0, bonus = 50.0, pulo = 300.0;   // valores padrao do plugin Goomba Stomp
+    float mult = 1.0, bonus = 50.0, pulo = 300.0;   // default values of the Goomba Stomp plugin
     Action r = Plugin_Continue;
-    Call_StartForward(g_fwStomp);                   // o FF2 Rewrite ajusta (OnStomp)
+    Call_StartForward(g_fwStomp);                   // FF2 Rewrite adjusts it (OnStomp)
     Call_PushCell(atk);
     Call_PushCell(vit);
     Call_PushFloatRef(mult);
@@ -598,7 +598,7 @@ bool Stomp(int atk, int vit, bool agendado = false)
     Call_PushFloatRef(pulo);
     Call_Finish(r);
     if (r == Plugin_Handled || r == Plugin_Stop)
-        return false;                               // este boss nao aceita stomp
+        return false;                               // this boss does not accept stomps
     if (r != Plugin_Changed && EhBoss(vit))
     {
         mult = 0.0;
@@ -607,7 +607,7 @@ bool Stomp(int atk, int vit, bool agendado = false)
     }
     g_fUltimoStomp[atk] = agora;
     float dano = bonus + mult * float(GetClientHealth(vit));
-    int protecao = 0;                               // 1 = escudo, 2 = Razorback: segura o stomp do boss e quebra
+    int protecao = 0;                               // 1 = shield, 2 = Razorback: holds the boss stomp and breaks
     if (!EhBoss(vit) && g_cvEscudo.BoolValue)
     {
         int w = AchaEscudo(vit);
@@ -623,7 +623,7 @@ bool Stomp(int atk, int vit, bool agendado = false)
         {
             int vida = GetClientHealth(vit);
             int fica = vida - RoundToCeil(dano * 0.5);
-            SetEntityHealth(vit, fica < 1 ? 1 : fica);      // metade do dano e nunca mata
+            SetEntityHealth(vit, fica < 1 ? 1 : fica);      // half the damage and never kills
             TF2_RemoveWearable(vit, w);
             EmitGameSoundToAll("Player.Spy_Shield_Break", vit);
         }
@@ -644,7 +644,7 @@ bool Stomp(int atk, int vit, bool agendado = false)
         if (i != atk && i != vit && IsClientInGame(i) && !IsFakeClient(i))
             outros[n++] = i;
     }
-    // volume em dobro: o som sai 2 vezes juntas, em canais diferentes (o volume de um som so ja esta no maximo)
+    // double volume: the sound plays 2 times together, on different channels (a single sound is already at max volume)
     if (n > 0)
     {
         EmitSound(outros, n, SOM_STOMP, vit, SNDCHAN_AUTO, SNDLEVEL_SCREAMING);

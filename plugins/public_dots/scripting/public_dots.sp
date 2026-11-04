@@ -1,9 +1,9 @@
-// SKYNET: "public_dots" refeito (o original nao existe mais na internet). Habilidades de "drain over time" (DOT):
-//   dot_weapon_swap  - enquanto o DOT esta ligado troca a arma (arg1 nome, arg2 indice, arg3 atributos, arg4 visivel);
-//                      ao desligar volta para a outra (arg5..arg8)
-//   dot_model_swap   - enquanto o DOT esta ligado troca o modelo do boss (arg1); ao desligar volta o original
-//   dot_teleport     - ao ligar, teleporta para um inimigo aleatorio ate arg1 de distancia (arg2 som de falha,
-//                      arg3 particula na saida, arg4 particula na chegada, arg5 som)
+// SKYNET: "public_dots" remade (the original no longer exists online). "Drain over time" (DOT) abilities:
+//   dot_weapon_swap  - while the DOT is on, swaps the weapon (arg1 name, arg2 index, arg3 attributes, arg4 visible);
+//                      when turned off, goes back to the other one (arg5..arg8)
+//   dot_model_swap   - while the DOT is on, swaps the boss model (arg1); when turned off, the original comes back
+//   dot_teleport     - when turned on, teleports to a random enemy within arg1 distance (arg2 fail sound,
+//                      arg3 exit particle, arg4 arrival particle, arg5 sound)
 #pragma semicolon 1
 #include <sourcemod>
 #include <sdktools>
@@ -179,7 +179,7 @@ bool:Teleporta(client, boss)
     GetClientAbsOrigin(alvo, pv);
     FF2_GetAbilityArgumentString(boss, this_plugin_name, "dot_teleport", 3, s, sizeof(s));
     Particula(pb, s);
-    // abaixado, para caber no lugar do alvo sem ficar preso
+    // crouched, to fit in the target's spot without getting stuck
     SetEntProp(client, Prop_Send, "m_bDucked", 1);
     SetEntityFlags(client, GetEntityFlags(client) | FL_DUCKING);
     TeleportEntity(client, pv, NULL_VECTOR, Float:{0.0, 0.0, 0.0});

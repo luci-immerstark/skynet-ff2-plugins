@@ -1,6 +1,6 @@
-// SKYNET: "darkevoir" refeito (o original nao existe mais na internet). Usado pelo Michael Myers.
-//   special_darkevoir (na furia): por arg1 segundos o boss ignora as protecoes dos jogadores (uber, bonk,
-//   protecao de critico/explosao/bala/fogo do Vaccinator, Battalion's): o golpe dele tira a protecao e acerta.
+// SKYNET: "darkevoir" remade (the original no longer exists online). Used by Michael Myers.
+//   special_darkevoir (on rage): for arg1 seconds the boss ignores the players' protections (uber, bonk,
+//   Vaccinator crit/blast/bullet/fire resistance, Battalion's): its hit removes the protection and lands.
 #include <sourcemod>
 #include <sdkhooks>
 #include <tf2>

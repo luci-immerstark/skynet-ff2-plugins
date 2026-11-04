@@ -1,15 +1,15 @@
-// SKYNET Amplificador (refeito do "The Amplifier" 2.4, de 2010: codigo antigo que nao compila mais e trocava o modelo
-//   do dispenser, o que quebra a animacao de construcao). Aqui o Engineer escolhe em !amp e o dispenser que ele
-//   construir vira um Amplificador: em vez de curar/dar municao, da CRITICO aos aliados perto (anel colorido mostra o
-//   alcance). Cada aliado gasta metal do Amplificador por segundo; o metal regenera sozinho.
-//   Sabotado, sendo construido ou carregado, nao funciona. Spy disfarcado ou invisivel nao recebe (para nao se entregar).
+// SKYNET Amplifier (remade from "The Amplifier" 2.4, from 2010: old code that no longer compiles and swapped the
+//   dispenser model, which breaks the build animation). Here the Engineer picks it in !amp and the dispenser they
+//   build becomes an Amplifier: instead of healing/giving ammo, it gives CRITS to nearby allies (a colored ring shows the
+//   range). Each ally uses up the Amplifier's metal per second; the metal regenerates by itself.
+//   Sapped, being built or carried, it does not work. A disguised or cloaked Spy does not get it (so it does not give him away).
 //   Cvars: skynet_amp (1 liga), skynet_amp_cond (33 = critico; 16 = mini-critico), skynet_amp_raio (200),
 //          skynet_amp_metal_uso (5 por aliado/s), skynet_amp_metal_regen (15/s), skynet_amp_metal_max (400),
-//          skynet_amp_parede (1 = nao passa por parede).
-// 1.1.0: visual do Amplificador original (modelo, texturas e pedacos ao ser destruido). O dispenser e construido
-//   normalmente e, quando fica pronto, vira o modelo do Amplificador (com o efeito de teleporte). Nao sobe de nivel.
-//   Os arquivos sao baixados pelos jogadores na troca de mapa: instalado no meio do mapa, o modelo so aparece no
-//   proximo mapa (antes disso fica o dispenser colorido, para ninguem ver ERROR).
+//          skynet_amp_parede (1 = does not go through walls).
+// 1.1.0: original Amplifier look (model, textures and gibs when destroyed). The dispenser is built
+//   normally and, once ready, turns into the Amplifier model (with the teleport effect). It does not level up.
+//   Players download the files on map change: if installed mid-map, the model only shows on the
+//   next map (until then it stays a colored dispenser, so nobody sees ERROR).
 #include <sourcemod>
 #include <sdktools>
 #include <tf2>
@@ -100,7 +100,7 @@ public void OnMapStart()
         FormatEx(a, sizeof(a), "models/buildables/amplifier_test/gibs/amp_gib%d.mdl", g);
         PrecacheModel(a, true);
     }
-    g_bModelo = !g_bTarde;      // instalado no meio do mapa: quem esta jogando ainda nao baixou o modelo
+    g_bModelo = !g_bTarde;      // installed mid-map: people playing have not downloaded the model yet
     g_bTarde = false;
 }
 
@@ -174,7 +174,7 @@ public void Ev_Construiu(Event e, const char[] nome, bool sem)
         return;
     }
     g_bAmp[ent] = true;
-    SetEntProp(ent, Prop_Send, "m_bDisabled", 1);       // nao cura nem da municao
+    SetEntProp(ent, Prop_Send, "m_bDisabled", 1);       // does not heal or give ammo
     if (g_bModelo)
         SetEntityRenderColor(ent, 255, 255, 255, 255);
     else if (GetClientTeam(c) == view_as<int>(TFTeam_Red))
@@ -205,7 +205,7 @@ public Action T_Amp(Handle t)
         if (GetEntProp(ent, Prop_Send, "m_bBuilding") || GetEntProp(ent, Prop_Send, "m_bCarried") || GetEntProp(ent, Prop_Send, "m_bPlacing"))
             continue;
         SetEntProp(ent, Prop_Send, "m_bDisabled", 1);
-        SetEntProp(ent, Prop_Send, "m_iUpgradeMetal", 0);      // nao sobe de nivel (manteria o modelo de dispenser)
+        SetEntProp(ent, Prop_Send, "m_iUpgradeMetal", 0);      // does not level up (it would keep the dispenser model)
         if (g_bModelo && GetEntPropFloat(ent, Prop_Send, "m_flPercentageConstructed") >= 1.0)
         {
             char mdl[PLATFORM_MAX_PATH];

@@ -132,7 +132,7 @@ char g_sBotaoJM[4][18] = {"", "Reload", "Special Attack", "Secondary Attack"};	/
 char g_sBotaoMJT[4][18] = {"", "Secondary Attack", "Reload", "Special Attack"};
 #define GetJMButton() g_sBotaoJM[JM_ButtonType & 3]
 #define GetMJTButton() g_sBotaoMJT[MJT_ButtonType & 3]
-Handle g_hDreno = null;	// SKYNET: um timer de dreno so			// Internal
+Handle g_hDreno = null;	// SKYNET: a single drain timer			// Internal
 
 Handle jumpHUD = INVALID_HANDLE;
 
@@ -671,7 +671,7 @@ public Action OnPlayerRunCmd(int iClient, int &iButtons, int &iImpulse, float fl
 		if(!FF2_IsFF2Enabled() || FF2_GetRoundState() != 1)
 			return Plugin_Continue;
 		
-		static bool segurando[MAXPLAYERS+1];	// SKYNET: so conta o clique, nao cada tick com o botao apertado
+		static bool segurando[MAXPLAYERS+1];	// SKYNET: counts only the click, not every tick with the button held
 		bool apertou = (iButtons & IN_ATTACK2) != 0;
 		if(apertou && !segurando[iClient])
 		{

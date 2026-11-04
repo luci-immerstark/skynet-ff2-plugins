@@ -1,4 +1,4 @@
-// SKYNET: substituto do tf2attributes (que nao funciona no servidor 64 bits). Usa o VScript do proprio TF2.
+// SKYNET: replacement for tf2attributes (which does not work on the 64-bit server). Uses TF2's own VScript.
 #if defined _skynet_tf2attrib_included
  #endinput
 #endif

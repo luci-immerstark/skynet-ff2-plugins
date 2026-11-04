@@ -1,8 +1,8 @@
-// SKYNET FF2 Fila: fila de boss justa. Cada rodada sem ser boss vale +1; quem foi boss volta para o fim.
-// O plugin escreve os pontos de fila do FF2 no fim de cada rodada (rodadas esperando x 100 + sorteio para desempate),
-// entao o FF2 sempre escolhe quem esta esperando ha mais tempo. !fila mostra a ordem; sm_ff2fila (console) mostra tudo.
-// 1.1.0: todo mundo entra na fila (como no VSH oficial): o plugin apaga a opcao "nao quero ser boss" de cada jogador
-//   (ff2_pref_toggle 0 tira essa opcao do menu do FF2).
+// SKYNET FF2 Queue: fair boss queue. Each round without being boss is worth +1; whoever was boss goes back to the end.
+// The plugin writes FF2's queue points at the end of each round (rounds waiting x 100 + a random tiebreaker),
+// so FF2 always picks whoever has been waiting longest. !fila shows the order; sm_ff2fila (console) shows everything.
+// 1.1.0: everyone joins the queue (like official VSH): the plugin clears each player's "I don't want to be boss" option
+//   (ff2_pref_toggle 0 removes that option from the FF2 menu).
 #include <sourcemod>
 #pragma semicolon 1
 #pragma newdecls required
@@ -87,7 +87,7 @@ bool NaoQuer(int c)
     return false;
 }
 
-// tira o "nao quero ser boss" (valores negativos na lista de bosses do FF2)
+// removes "I don't want to be boss" (negative values in FF2's boss list)
 void TodosNaFila(int c)
 {
     if (GetFeatureStatus(FeatureType_Native, "FF2R_GetClientListing") != FeatureStatus_Available)
@@ -114,7 +114,7 @@ void Aplica()
 public void OnClientPostAdminCheck(int c)
 {
     if (!IsFakeClient(c))
-        CreateTimer(8.0, T_Entrou, GetClientUserId(c), TIMER_FLAG_NO_MAPCHANGE);   // depois que o FF2 carrega o banco
+        CreateTimer(8.0, T_Entrou, GetClientUserId(c), TIMER_FLAG_NO_MAPCHANGE);   // after FF2 loads the database
 }
 
 public Action T_Entrou(Handle t, int uid)
@@ -130,7 +130,7 @@ public Action T_Entrou(Handle t, int uid)
 
 public void Ev_Fim(Event e, const char[] nome, bool sem)
 {
-    CreateTimer(1.0, T_Fim, _, TIMER_FLAG_NO_MAPCHANGE);   // depois do FF2 dar os pontos dele
+    CreateTimer(1.0, T_Fim, _, TIMER_FLAG_NO_MAPCHANGE);   // after FF2 hands out its points
 }
 
 public Action T_Fim(Handle t)
@@ -142,9 +142,9 @@ public Action T_Fim(Handle t)
         if (!Humano(c))
             continue;
         if (FF2R_GetBossData(c))
-            SetEspera(c, 0);                         // foi boss: volta para o fim da fila
+            SetEspera(c, 0);                         // was boss: goes back to the end of the queue
         else if (GetClientTeam(c) >= 2)
-            SetEspera(c, Espera(c) + 1);             // jogou a rodada sem ser boss
+            SetEspera(c, Espera(c) + 1);             // played the round without being boss
     }
     Aplica();
     return Plugin_Stop;
@@ -171,7 +171,7 @@ int Ordem(int[] lista)
     for (int c = 1; c <= MaxClients; c++)
         if (Humano(c) && GetClientTeam(c) >= 2 && !NaoQuer(c) && !(FF2Ativo() && FF2R_GetBossData(c)))
             lista[n++] = c;
-    for (int i = 0; i < n; i++)          // ordena por pontos de fila do FF2 (o que ele usa para escolher)
+    for (int i = 0; i < n; i++)          // sorts by FF2 queue points (what it uses to choose)
         for (int j = i + 1; j < n; j++)
             if (FF2_GetQueuePoints(lista[j]) > FF2_GetQueuePoints(lista[i]))
             {

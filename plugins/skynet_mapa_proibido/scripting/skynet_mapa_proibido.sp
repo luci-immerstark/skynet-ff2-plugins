@@ -1,7 +1,7 @@
-// SKYNET Mapa Proibido: mapas da lista nunca ficam no ar. Se o servidor abrir num deles (ex.: o mapa inicial do
-//   container depois do reinicio diario, arena_lumberyard), troca na hora para o mapa de skynet_mapa_destino
-//   (ou, se ele estiver vazio ou nao existir, para um mapa aleatorio da rotacao).
-// 1.1: mapa de destino fixo (skynet_mapa_destino).
+// SKYNET Forbidden Map: maps in the list never stay up. If the server starts on one of them (e.g. the container's starting
+//   map after the daily restart, arena_lumberyard), it immediately changes to the skynet_mapa_destino map
+//   (or, if that is empty or does not exist, to a random map from the rotation).
+// 1.1: fixed destination map (skynet_mapa_destino).
 #include <sourcemod>
 #pragma semicolon 1
 #pragma newdecls required

@@ -1,7 +1,7 @@
-// SKYNET Dissolve: refeito do "Dissolve" (L. Duke, 2008; o .smx antigo nao tem codigo e ficava escrevendo
-//   "[DISSOLVE] Could not get ragdoll" no console). O corpo de quem morre se dissolve (efeito de energia do HL2).
-//   Melhorias: nao dissolve a morte falsa do Dead Ringer (entregaria o Spy), nao mexe em quem ja renasceu, sem spam.
-//   Cvars (mesmos nomes do original): sm_dissolve (1 liga), sm_dissolve_delay (segundos, 2), sm_dissolve_type (0-3).
+// SKYNET Dissolve: remade from "Dissolve" (L. Duke, 2008; the old .smx has no source and kept printing
+//   "[DISSOLVE] Could not get ragdoll" in the console). The body of whoever dies dissolves (HL2 energy effect).
+//   Improvements: does not dissolve the Dead Ringer fake death (it would give the Spy away), leaves players who already respawned alone, no spam.
+//   Cvars (same names as the original): sm_dissolve (1 = on), sm_dissolve_delay (seconds, 2), sm_dissolve_type (0-3).
 #include <sourcemod>
 #include <sdktools>
 #include <tf2>
@@ -44,7 +44,7 @@ public Action T_Dissolve(Handle t, int uid)
         return Plugin_Stop;
     int corpo = GetEntPropEnt(c, Prop_Send, "m_hRagdoll");
     if (corpo <= MaxClients || !IsValidEntity(corpo))
-        return Plugin_Stop;                 // sem corpo (explodiu em pedacos, por exemplo)
+        return Plugin_Stop;                 // no body (blown to pieces, for example)
     int dis = CreateEntityByName("env_entity_dissolver");
     if (dis == -1)
         return Plugin_Stop;

@@ -11,7 +11,7 @@
 #include <freak_fortress_2>
 #include <freak_fortress_2_subplugin>
 #tryinclude <freak_fortress_2_extras>
-// (tf2attributes nao usado)
+// (tf2attributes not used)
 #include <ff2_dynamic_defaults>
 #undef REQUIRE_PLUGIN
 #tryinclude <goomba>
@@ -991,7 +991,7 @@ public AMS_Tick(clientIdx, buttons, Float:curTime)
 	if ((actKeyDown && !AMS_ActKeyDown[clientIdx]) || AMS_ActivatedByMedic[clientIdx])
 	{
 		// refund rage if FF2 ate it up
-		new bool:devolveu = false;	// SKYNET: guarda a rage que o FF2 deixou
+		new bool:devolveu = false;	// SKYNET: saves the rage FF2 left
 		new Float:rageAntes = 0.0;
 		if (AMS_ActivatedByMedic[clientIdx] && AMS_RageSpent[clientIdx])
 		{
@@ -1014,7 +1014,7 @@ public AMS_Tick(clientIdx, buttons, Float:curTime)
 		}
 		else
 		{
-			if (devolveu)	// SKYNET: habilidade nao foi usada -> desfaz a devolucao (antes dava rage infinita)
+			if (devolveu)	// SKYNET: ability was not used -> undoes the refund (it used to give infinite rage)
 				FF2_SetBossCharge(bossIdx, 0, rageAntes);
 			if (AMS_AbilityCanBeEnded[clientIdx][spellIdx])
 				AMS_EndAbility(clientIdx, spellIdx);

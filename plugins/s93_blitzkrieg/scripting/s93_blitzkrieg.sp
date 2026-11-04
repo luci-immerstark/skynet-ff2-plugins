@@ -1096,7 +1096,7 @@ public Blitzkrieg_HookAbilities()
 						Blitz_WaveTick=GetEngineTime()+1.0;
 						
 						// Disable FF2's countdown timer and use Blitzkrieg's own
-						playerCT=0; if(FindConVar("ff2_countdown_players")!=INVALID_HANDLE) playerCT=GetConVarInt(FindConVar("ff2_countdown_players")); // SKYNET: o FF2 Rewrite nao tem essa cvar
+						playerCT=0; if(FindConVar("ff2_countdown_players")!=INVALID_HANDLE) playerCT=GetConVarInt(FindConVar("ff2_countdown_players")); // SKYNET: FF2 Rewrite does not have this cvar
 						if(playerCT)
 						{
 							SetConVarInt(FindConVar("ff2_countdown_players"),0);

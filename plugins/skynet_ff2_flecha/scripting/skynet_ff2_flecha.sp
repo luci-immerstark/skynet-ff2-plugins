@@ -1,11 +1,11 @@
-// SKYNET FF2 Flecha Explosiva: a flecha da besta do Medic (Crusader's Crossbow) explode ao acertar parede ou inimigo.
-//   Dano em area nos inimigos (o dano conta para o Medic), menor na borda da explosao, sem atravessar parede.
-//   So para os jogadores contra o boss (boss e minions nao ganham). Flecha em aliado continua so curando.
-//   Cvars: skynet_ff2_flecha (1 liga), skynet_ff2_flecha_dano (300), skynet_ff2_flecha_raio (150),
-//          skynet_ff2_flecha_borda (0.5 = na borda faz metade), skynet_ff2_flecha_empurra (0 = nao empurra),
-//          skynet_ff2_flecha_max (250 = teto de cada flechada em cada alvo: acerto direto + explosao, ja com critico).
-// 1.1.0: teto por flechada. Antes o acerto direto da flecha somava com a explosao (e critico/mini-critico subiam
-//   mais ainda), passando de 400 no boss. Agora a soma das duas, ja com todos os bonus, nao passa do teto.
+// SKYNET FF2 Explosive Arrow: the Medic's crossbow bolt (Crusader's Crossbow) explodes when it hits a wall or an enemy.
+//   Area damage to enemies (the damage counts for the Medic), lower at the edge of the explosion, not through walls.
+//   Only for the players fighting the boss (boss and minions do not get it). A bolt on an ally still only heals.
+//   Cvars: skynet_ff2_flecha (1 = on), skynet_ff2_flecha_dano (300), skynet_ff2_flecha_raio (150),
+//          skynet_ff2_flecha_borda (0.5 = half at the edge), skynet_ff2_flecha_empurra (0 = no push),
+//          skynet_ff2_flecha_max (250 = cap per bolt per target: direct hit + explosion, crits included).
+// 1.1.0: cap per bolt. Before, the bolt's direct hit added up with the explosion (and crits/mini-crits pushed it
+//   even higher), going over 400 on the boss. Now the sum of both, with all bonuses, never goes over the cap.
 #include <sourcemod>
 #include <sdktools>
 #include <sdkhooks>
@@ -29,9 +29,9 @@ native Handle FF2R_GetBossData(int client);
 
 ConVar g_cvLiga, g_cvDano, g_cvRaio, g_cvBorda, g_cvEmpurra, g_cvMax;
 bool g_bExplodiu[2049];
-float g_fDireto[MAXPLAYERS + 1][MAXPLAYERS + 1];    // [atirador][alvo]: dano do acerto direto da ultima flecha
+float g_fDireto[MAXPLAYERS + 1][MAXPLAYERS + 1];    // [shooter][target]: direct hit damage of the last bolt
 float g_fDiretoT[MAXPLAYERS + 1][MAXPLAYERS + 1];
-int g_iExpAlvo;                                    // alvo da explosao em andamento (0 = nenhuma)
+int g_iExpAlvo;                                    // target of the explosion in progress (0 = none)
 float g_fExpLimite;
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
@@ -59,7 +59,7 @@ public void OnClientPutInServer(int client)
     SDKHook(client, SDKHook_OnTakeDamageAlive, OnDanoVivo);
 }
 
-// Dano final (depois de critico, mini-critico e bonus do FF2): segura o teto da flechada
+// Final damage (after crit, mini-crit and FF2 bonuses): enforces the per-bolt cap
 public Action OnDanoVivo(int v, int &atk, int &inf, float &dano, int &tipo, int &arma, float forca[3], float pos[3], int custom)
 {
     float teto = g_cvMax.FloatValue;
@@ -126,13 +126,13 @@ public Action OnToque(int flecha, int outro)
     if (dono < 1 || dono > MaxClients || !IsClientInGame(dono) || EhBoss(dono))
         return Plugin_Continue;
     if (outro >= 1 && outro <= MaxClients && GetClientTeam(outro) == GetClientTeam(dono))
-        return Plugin_Continue;                     // aliado: so cura
+        return Plugin_Continue;                     // ally: heal only
     if (outro > MaxClients)
     {
         char cls[32];
         GetEntityClassname(outro, cls, sizeof(cls));
         if (StrContains(cls, "trigger_") == 0 || StrContains(cls, "func_respawnroom") == 0)
-            return Plugin_Continue;                 // gatilhos invisiveis do mapa nao contam
+            return Plugin_Continue;                 // invisible map triggers do not count
     }
     g_bExplodiu[flecha] = true;
     float pos[3];
@@ -142,7 +142,7 @@ public Action OnToque(int flecha, int outro)
     dp.WriteFloat(pos[0]);
     dp.WriteFloat(pos[1]);
     dp.WriteFloat(pos[2]);
-    RequestFrame(F_Explode, dp);                    // fora do toque, no proximo frame
+    RequestFrame(F_Explode, dp);                    // outside the touch, on the next frame
     return Plugin_Continue;
 }
 
@@ -175,13 +175,13 @@ public void F_Explode(DataPack dp)
         if (v == dono || !IsClientInGame(v) || !IsPlayerAlive(v) || GetClientTeam(v) == time)
             continue;
         GetClientAbsOrigin(v, alvo);
-        alvo[2] += 40.0;                            // meio do corpo
+        alvo[2] += 40.0;                            // middle of the body
         float dist = GetVectorDistance(pos, alvo);
         if (dist > raio)
             continue;
         TR_TraceRayFilter(pos, alvo, MASK_SOLID, RayType_EndPoint, F_SoMundo);
         if (TR_DidHit())
-            continue;                               // parede no meio
+            continue;                               // wall in the way
         float d = dano * (1.0 - (1.0 - borda) * dist / raio);
         float limite = d;
         float teto = g_cvMax.FloatValue;
@@ -190,7 +190,7 @@ public void F_Explode(DataPack dp)
             float usado = GetGameTime() - g_fDiretoT[dono][v] <= 0.3 ? g_fDireto[dono][v] : 0.0;
             float resta = teto - usado;
             if (resta <= 0.0)
-                continue;                           // o acerto direto ja chegou no teto
+                continue;                           // the direct hit already reached the cap
             if (limite > resta)
                 limite = resta;
             if (d > limite)

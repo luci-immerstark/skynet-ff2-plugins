@@ -1,4 +1,4 @@
-// SKYNET: nomes dos atributos do TF2 (gerado do items_game.txt do servidor)
+// SKYNET: TF2 attribute names (generated from the server's items_game.txt)
 #if defined _skynet_atributos_included
  #endinput
 #endif

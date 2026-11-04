@@ -1,5 +1,5 @@
-// SKYNET Silencio: esconde do chat dos jogadores as mensagens "Server cvar 'x' changed to y" (configuracoes que
-//   plugins mudam durante o jogo, como a velocidade do modo fantasma de alguns bosses). O log do servidor continua igual.
+// SKYNET Silence: hides the "Server cvar 'x' changed to y" messages from players' chat (settings that
+//   plugins change during the game, like the ghost mode speed of some bosses). The server log stays the same.
 #include <sourcemod>
 #pragma semicolon 1
 #pragma newdecls required
