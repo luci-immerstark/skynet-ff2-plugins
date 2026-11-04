@@ -1,0 +1,98 @@
+"Phrases"
+{
+    "padphrase_announcement1"
+    {
+        "en"    "Engineer Pads {blue}v%s{default} by {unique}Starblaster64{default}."
+        "pt"    "Engineer Pads {blue}v%s{default} por {unique}Starblaster64{default}."
+    }
+    "padphrase_announcement2"
+    {
+        "en"    "Type {olive}/pad{default} to enable/disable building Engineer Pads! Type {olive}/pad_help{default} for more info."
+        "pt"    "Engineer: digite {olive}/pad{default} para ligar/desligar as plataformas no lugar do teleporte! {olive}/pad_help{default} explica."
+    }
+    "padphrase_noaccess"
+    {
+        "en"    "You don't have access to build Engineer Pads!"
+        "pt"    "Voce nao tem acesso para construir plataformas!"
+    }
+    "padphrase_enabled"
+    {
+        "en"    "Engineer Pads {green}ENABLED{default}!"
+        "pt"    "Plataformas do Engineer {green}LIGADAS{default}!"
+    }
+    "padphrase_disabled"
+    {
+        "en"    "Engineer Pads {red}DISABLED{default}!"
+        "pt"    "Plataformas do Engineer {red}DESLIGADAS{default}!"
+    }
+    "padphrase_menutitle"
+    {
+        "en"    "Engineer Pads Toggle Menu"
+        "pt"    "Plataformas do Engineer"
+    }
+    "padphrase_menuenable"
+    {
+        "en"    "Enable"
+        "pt"    "Ligar"
+    }
+    "padphrase_menudisable"
+    {
+        "en"    "Disable"
+        "pt"    "Desligar"
+    }
+    "padphrase_infotitle"
+    {
+        "en"    "=== Engineer Pads ==="
+        "pt"    "=== Plataformas do Engineer ==="
+    }
+    "padphrase_infogeneral"
+    {
+        "en"    "Engineer Pads replace any Teleporters you build. They have %i HP and cannot be upgraded."
+        "pt"    "As plataformas substituem os teleportes que voce constroi. Tem %i de vida e nao sobem de nivel."
+    }
+    "padphrase_infoboost"
+    {
+        "en"    "Boost Pads: Increases allies movespeed for %.1fs. Cooldown: %.1fs."
+        "pt"    "Plataforma de velocidade: aliados ficam mais rapidos por %.1fs. Recarga: %.1fs."
+    }
+    "padphrase_infojump"
+    {
+        "en"    "Jump Pads: Launches allies in the direction they're moving. Cooldown: %.1fs."
+        "pt"    "Plataforma de pulo: lanca os aliados na direcao em que estao andando. Recarga: %.1fs."
+    }
+    "padphrase_infoeureka"
+    {
+        "en"    "You cannot use the Eureka Effect to teleport to any Exits if they have been converted to a Pad."
+        "pt"    "O Eureka Effect nao teleporta para uma saida que virou plataforma."
+    }
+    "padphrase_infosniper"
+    {
+        "en"    "You cannot scope in as a Sniper while being launched by a Jump Pad."
+        "pt"    "O Sniper nao consegue mirar enquanto e lancado pela plataforma de pulo."
+    }
+    "padphrase_infoaiming"
+    {
+        "en"    "You will not be boosted by Boost Pads if you are scoped in/revved up as a Sniper/Heavy."
+        "pt"    "Sniper mirando ou Heavy girando a metralhadora nao ganham velocidade da plataforma."
+    }
+    "padphrase_infoexit"
+    {
+        "en"    "Exit"
+        "pt"    "Saida"
+    }
+    "padphrase_deploy"
+    {
+        "en"    "Deploying Pad Type: {teamcolor}%t"
+        "pt"    "Tipo de plataforma: {teamcolor}%t"
+    }
+    "padphrase_boost"
+    {
+        "en"    "Boost"
+        "pt"    "Velocidade"
+    }
+    "padphrase_jump"
+    {
+        "en"    "Jump"
+        "pt"    "Pulo"
+    }
+}

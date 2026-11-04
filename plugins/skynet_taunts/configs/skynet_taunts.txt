@@ -1,0 +1,628 @@
+"SkynetTaunts"
+{
+    "31207"
+    {
+        "name"       "Bare Knuckle Beatdown"
+        "classes"    "64"
+    }
+    "31633"
+    {
+        "name"       "Barrel Roll"
+        "classes"    "16"
+    }
+    "1117"
+    {
+        "name"       "Battin' a Thousand"
+        "classes"    "2"
+    }
+    "31519"
+    {
+        "name"       "Bear Hug"
+        "classes"    "64"
+    }
+    "31382"
+    {
+        "name"       "Borrowed Bones"
+        "classes"    "32"
+    }
+    "30618"
+    {
+        "name"       "Bucking Bronco"
+        "classes"    "512"
+    }
+    "31603"
+    {
+        "name"       "Buffoon's Bivouac"
+        "classes"    "8"
+    }
+    "30621"
+    {
+        "name"       "Burstchester"
+        "classes"    "1022"
+    }
+    "1108"
+    {
+        "name"       "Buy A Life"
+        "classes"    "256"
+    }
+    "31438"
+    {
+        "name"       "Can It!"
+        "classes"    "8"
+    }
+    "31578"
+    {
+        "name"       "Chairholder"
+        "classes"    "2"
+    }
+    "31412"
+    {
+        "name"       "Cheers!"
+        "classes"    "1022"
+    }
+    "31467"
+    {
+        "name"       "Commending Clap"
+        "classes"    "1022"
+    }
+    "1118"
+    {
+        "name"       "Conga"
+        "classes"    "1022"
+    }
+    "31439"
+    {
+        "name"       "Cremator's Condolences"
+        "classes"    "128"
+    }
+    "31465"
+    {
+        "name"       "Crushing Defeat"
+        "classes"    "64"
+    }
+    "31491"
+    {
+        "name"       "Curtain Call"
+        "classes"    "256"
+    }
+    "31576"
+    {
+        "name"       "Dead Mann's Drink"
+        "classes"    "16"
+    }
+    "1119"
+    {
+        "name"       "Deep Fried Desire"
+        "classes"    "2"
+    }
+    "30839"
+    {
+        "name"       "Didgeridrongo"
+        "classes"    "4"
+    }
+    "30762"
+    {
+        "name"       "Disco Fever"
+        "classes"    "256"
+    }
+    "31236"
+    {
+        "name"       "Doctor's Defibrillators"
+        "classes"    "32"
+    }
+    "31291"
+    {
+        "name"       "Drunk Mann's Cannon"
+        "classes"    "16"
+    }
+    "31604"
+    {
+        "name"       "Faux-calization"
+        "classes"    "256"
+    }
+    "1107"
+    {
+        "name"       "Flippin' Awesome"
+        "classes"    "1022"
+    }
+    "31521"
+    {
+        "name"       "Flying Colors"
+        "classes"    "1022"
+    }
+    "31493"
+    {
+        "name"       "Fore-Head Slice"
+        "classes"    "16"
+    }
+    "31414"
+    {
+        "name"       "Foul Play"
+        "classes"    "2"
+    }
+    "1113"
+    {
+        "name"       "Fresh Brewed Victory"
+        "classes"    "8"
+    }
+    "31605"
+    {
+        "name"       "Friendly Fire"
+        "classes"    "128"
+    }
+    "31546"
+    {
+        "name"       "Healthcare Hog"
+        "classes"    "2"
+    }
+    "31545"
+    {
+        "name"       "Heartbreaker"
+        "classes"    "32"
+    }
+    "167"
+    {
+        "name"       "High Five"
+        "classes"    "1022"
+    }
+    "31630"
+    {
+        "name"       "Hippocratic Hypocrite"
+        "classes"    "32"
+    }
+    "1116"
+    {
+        "name"       "I See You"
+        "classes"    "4"
+    }
+    "1157"
+    {
+        "name"       "Kazotsky Kick"
+        "classes"    "1022"
+    }
+    "31348"
+    {
+        "name"       "Killer Joke"
+        "classes"    "1022"
+    }
+    "463"
+    {
+        "name"       "Laugh"
+        "classes"    "1022"
+    }
+    "30922"
+    {
+        "name"       "Luxury Lounge"
+        "classes"    "256"
+    }
+    "1162"
+    {
+        "name"       "Mannrobics"
+        "classes"    "1022"
+    }
+    "477"
+    {
+        "name"       "Meet the Medic Heroic"
+        "classes"    "32"
+    }
+    "30614"
+    {
+        "name"       "Most Wanted"
+        "classes"    "4"
+    }
+    "31413"
+    {
+        "name"       "Mourning Mercs"
+        "classes"    "1022"
+    }
+    "31381"
+    {
+        "name"       "Neck Snap"
+        "classes"    "8"
+    }
+    "1120"
+    {
+        "name"       "Oblooterated"
+        "classes"    "16"
+    }
+    "31631"
+    {
+        "name"       "One-Eyed Punt"
+        "classes"    "8"
+    }
+    "1196"
+    {
+        "name"       "Panzer Pants"
+        "classes"    "8"
+    }
+    "1112"
+    {
+        "name"       "Party Trick"
+        "classes"    "128"
+    }
+    "31466"
+    {
+        "name"       "Peace Out"
+        "classes"    "2"
+    }
+    "31492"
+    {
+        "name"       "Peace!"
+        "classes"    "1022"
+    }
+    "30570"
+    {
+        "name"       "Pool Party"
+        "classes"    "128"
+    }
+    "1115"
+    {
+        "name"       "Rancho Relaxo"
+        "classes"    "512"
+    }
+    "438"
+    {
+        "name"       "Replay"
+        "classes"    "1022"
+    }
+    "1109"
+    {
+        "name"       "Results Are In"
+        "classes"    "32"
+    }
+    "31547"
+    {
+        "name"       "Ring King"
+        "classes"    "64"
+    }
+    "31380"
+    {
+        "name"       "Roar O'War"
+        "classes"    "16"
+    }
+    "31322"
+    {
+        "name"       "Roasty Toasty"
+        "classes"    "128"
+    }
+    "31155"
+    {
+        "name"       "Rocket Jockey"
+        "classes"    "8"
+    }
+    "1110"
+    {
+        "name"       "RPS"
+        "classes"    "1022"
+    }
+    "30921"
+    {
+        "name"       "Runner's Rhythm"
+        "classes"    "2"
+    }
+    "31320"
+    {
+        "name"       "Russian Rubdown"
+        "classes"    "64"
+    }
+    "31157"
+    {
+        "name"       "Scorcher's Solo"
+        "classes"    "128"
+    }
+    "30840"
+    {
+        "name"       "Scotsmann's Stagger"
+        "classes"    "16"
+    }
+    "31634"
+    {
+        "name"       "Sear You Later"
+        "classes"    "128"
+    }
+    "30816"
+    {
+        "name"       "Second Rate Sorcery"
+        "classes"    "1022"
+    }
+    "31292"
+    {
+        "name"       "Shanty Shipmate"
+        "classes"    "16"
+    }
+    "31237"
+    {
+        "name"       "Shooter's Stakeout"
+        "classes"    "4"
+    }
+    "31632"
+    {
+        "name"       "Showrunner's Spirit"
+        "classes"    "2"
+    }
+    "1111"
+    {
+        "name"       "Skullcracker"
+        "classes"    "1022"
+    }
+    "30673"
+    {
+        "name"       "Soldier's Requiem"
+        "classes"    "8"
+    }
+    "1114"
+    {
+        "name"       "Spent Well Spirits"
+        "classes"    "16"
+    }
+    "31161"
+    {
+        "name"       "Spin-to-Win"
+        "classes"    "2"
+    }
+    "1106"
+    {
+        "name"       "Square Dance"
+        "classes"    "1022"
+    }
+    "31347"
+    {
+        "name"       "Star-Spangled Strategy"
+        "classes"    "8"
+    }
+    "31440"
+    {
+        "name"       "Straight Shooter Tutor"
+        "classes"    "4"
+    }
+    "30918"
+    {
+        "name"       "Surgeon's Squeezebox"
+        "classes"    "32"
+    }
+    "31321"
+    {
+        "name"       "Tailored Terminal"
+        "classes"    "256"
+    }
+    "31520"
+    {
+        "name"       "Texan Trickshot"
+        "classes"    "512"
+    }
+    "31160"
+    {
+        "name"       "Texas Truckin"
+        "classes"    "512"
+    }
+    "31286"
+    {
+        "name"       "Texas Twirl 'Em"
+        "classes"    "512"
+    }
+    "30763"
+    {
+        "name"       "The Balloonibouncer"
+        "classes"    "128"
+    }
+    "1175"
+    {
+        "name"       "The Boiling Point"
+        "classes"    "64"
+    }
+    "31156"
+    {
+        "name"       "The Boston Boarder"
+        "classes"    "2"
+    }
+    "30572"
+    {
+        "name"       "The Boston Breakdance"
+        "classes"    "2"
+    }
+    "30615"
+    {
+        "name"       "The Boxtrot"
+        "classes"    "256"
+    }
+    "30920"
+    {
+        "name"       "The Bunnyhopper"
+        "classes"    "2"
+    }
+    "1168"
+    {
+        "name"       "The Carlton"
+        "classes"    "2"
+    }
+    "31602"
+    {
+        "name"       "The Circuit Breaker"
+        "classes"    "64"
+    }
+    "31577"
+    {
+        "name"       "The Critical Fail"
+        "classes"    "1022"
+    }
+    "31289"
+    {
+        "name"       "The Crypt Creeper"
+        "classes"    "256"
+    }
+    "31201"
+    {
+        "name"       "The Drunken Sailor"
+        "classes"    "16"
+    }
+    "30842"
+    {
+        "name"       "The Dueling Banjo"
+        "classes"    "512"
+    }
+    "31518"
+    {
+        "name"       "The Final Score"
+        "classes"    "1022"
+    }
+    "31162"
+    {
+        "name"       "The Fist Bump"
+        "classes"    "1022"
+    }
+    "30761"
+    {
+        "name"       "The Fubar Fanfare"
+        "classes"    "8"
+    }
+    "31349"
+    {
+        "name"       "The Head Doctor"
+        "classes"    "32"
+    }
+    "30876"
+    {
+        "name"       "The Headcase"
+        "classes"    "128"
+    }
+    "31233"
+    {
+        "name"       "The Homerunner's Hobby"
+        "classes"    "2"
+    }
+    "31239"
+    {
+        "name"       "The Hot Wheeler"
+        "classes"    "128"
+    }
+    "30845"
+    {
+        "name"       "The Jumping Jack"
+        "classes"    "512"
+    }
+    "31354"
+    {
+        "name"       "The Killer Signature"
+        "classes"    "2"
+    }
+    "30609"
+    {
+        "name"       "The Killer Solo"
+        "classes"    "4"
+    }
+    "31203"
+    {
+        "name"       "The Mannbulance!"
+        "classes"    "32"
+    }
+    "31153"
+    {
+        "name"       "The Pooped Deck"
+        "classes"    "16"
+    }
+    "31202"
+    {
+        "name"       "The Profane Puppeteer"
+        "classes"    "8"
+    }
+    "30616"
+    {
+        "name"       "The Proletariat Showoff"
+        "classes"    "64"
+    }
+    "31468"
+    {
+        "name"       "The Punchline"
+        "classes"    "256"
+    }
+    "31352"
+    {
+        "name"       "The Road Rager"
+        "classes"    "64"
+    }
+    "30843"
+    {
+        "name"       "The Russian Arms Race"
+        "classes"    "64"
+    }
+    "31288"
+    {
+        "name"       "The Scaredy-cat!"
+        "classes"    "1022"
+    }
+    "1197"
+    {
+        "name"       "The Scooty Scoot"
+        "classes"    "2"
+    }
+    "1015"
+    {
+        "name"       "The Shred Alert"
+        "classes"    "1022"
+    }
+    "30919"
+    {
+        "name"       "The Skating Scorcher"
+        "classes"    "128"
+    }
+    "30844"
+    {
+        "name"       "The Soviet Strongarm"
+        "classes"    "64"
+    }
+    "1174"
+    {
+        "name"       "The Table Tantrum"
+        "classes"    "64"
+    }
+    "30917"
+    {
+        "name"       "The Trackman's Touchdown"
+        "classes"    "2"
+    }
+    "31290"
+    {
+        "name"       "The Travel Agent"
+        "classes"    "256"
+    }
+    "1172"
+    {
+        "name"       "The Victory Lap"
+        "classes"    "1022"
+    }
+    "31154"
+    {
+        "name"       "Time Out Therapy"
+        "classes"    "32"
+    }
+    "30671"
+    {
+        "name"       "True Scotsman's Call"
+        "classes"    "16"
+    }
+    "31351"
+    {
+        "name"       "Tuefort Tango"
+        "classes"    "256"
+    }
+    "31441"
+    {
+        "name"       "Unleashed Rage"
+        "classes"    "1022"
+    }
+    "1182"
+    {
+        "name"       "Yeti Punch"
+        "classes"    "1022"
+    }
+    "1183"
+    {
+        "name"       "Yeti Smash"
+        "classes"    "1022"
+    }
+    "30672"
+    {
+        "name"       "Zoomin' Broom"
+        "classes"    "1022"
+    }
+}
