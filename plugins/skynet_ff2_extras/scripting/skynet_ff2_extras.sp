@@ -35,6 +35,7 @@
 // 1.2.8: backstab, Market Gardener and stomp on the boss always take exactly their % (TF2 resistances could change
 //   the backstab/market hit after our hook; the difference is now fixed right after the hit);
 //   skynet_ff2_dano_debug 1 shows asked x applied for each of these hits in chat, for testing.
+//   New defaults: backstab 10%, stomp 8%, Market Gardener 8%.
 // 1.2.7: the % damages use the boss's total health (one life x number of lives).
 // 1.2.6: damage on the boss as a % of its full health (per life): backstab 7%, stomp 5% and the Market Gardener
 //   while rocket jumping 5% (skynet_ff2_backstab_pct / skynet_ff2_stomp_pct / skynet_ff2_market_pct; 0 = FF2's own).
@@ -102,9 +103,9 @@ public void OnPluginStart()
     g_cvUberCrit    = CreateConVar("skynet_ff2_uber_critico", "1", "A uber normal da Medigun tambem da critico enquanto durar");
     g_cvConfete     = CreateConVar("skynet_ff2_stomp_confete", "bday_confetti", "Efeito que sai da cabeca de quem foi pisado no stomp (vazio = nenhum). Ex.: bday_confetti, mini_fireworks");
     g_cvLacaioCrit  = CreateConVar("skynet_ff2_lacaio_critico", "0", "Summons (players who spawn to help the boss) can crit (0 = never)");
-    g_cvPctStab     = CreateConVar("skynet_ff2_backstab_pct", "7", "Backstab no boss: % da vida cheia do boss (0 = dano do FF2)", _, true, 0.0, true, 100.0);
-    g_cvPctStomp    = CreateConVar("skynet_ff2_stomp_pct", "5", "Stomp no boss: % da vida cheia do boss (0 = dano do FF2)", _, true, 0.0, true, 100.0);
-    g_cvPctMarket   = CreateConVar("skynet_ff2_market_pct", "5", "Market Gardener no ar (rocket jump) no boss: % da vida cheia do boss (0 = dano normal)", _, true, 0.0, true, 100.0);
+    g_cvPctStab     = CreateConVar("skynet_ff2_backstab_pct", "10", "Backstab no boss: % da vida cheia do boss (0 = dano do FF2)", _, true, 0.0, true, 100.0);
+    g_cvPctStomp    = CreateConVar("skynet_ff2_stomp_pct", "8", "Stomp no boss: % da vida cheia do boss (0 = dano do FF2)", _, true, 0.0, true, 100.0);
+    g_cvPctMarket   = CreateConVar("skynet_ff2_market_pct", "8", "Market Gardener no ar (rocket jump) no boss: % da vida cheia do boss (0 = dano normal)", _, true, 0.0, true, 100.0);
     g_cvDanoDebug   = CreateConVar("skynet_ff2_dano_debug", "0", "1 = mostra no chat o dano de cada facada/stomp/market no boss (para teste)", _, true, 0.0, true, 1.0);
     CreateTimer(0.2, T_UberCrit, _, TIMER_REPEAT);
     AutoExecConfig(true, "skynet_ff2_extras");
