@@ -7,6 +7,7 @@
 #pragma semicolon 1
 #pragma newdecls required
 
+// SKYNET: no version/credits announcement (only the /pad tip) and console replies in Portuguese.
 //Define version number in a needlessly complex way
 #define MAJOR	"1"
 #define MINOR	"1"
@@ -232,19 +233,7 @@ public Action Timer_PadsAnnounce(Handle hTimer)
 		return Plugin_Stop;
 	}
 	
-	int iAnnouncement = GetRandomInt(0, 5);
-	
-	switch (iAnnouncement)
-	{
-		case 0:
-		{
-			CPrintToChatAll("{orange}[EngiPads]{default} %t", "padphrase_announcement1", PLUGIN_VERSION);
-		}
-		default:
-		{
-			CPrintToChatAll("{orange}[EngiPads]{default} %t", "padphrase_announcement2");
-		}
-	}
+	CPrintToChatAll("{orange}[EngiPads]{default} %t", "padphrase_announcement2");
 	
 	g_hPadTimerAnnounce = CreateTimer(cvarPads[PadsAnnounce].FloatValue, Timer_PadsAnnounce, _, TIMER_FLAG_NO_MAPCHANGE);
 	
@@ -872,7 +861,7 @@ public Action TogglePadsMenuCmd(int iClient, int nArgs)
 {
 	if (!iClient)	//if client was the server console
 	{
-		ReplyToCommand(iClient, "This command can only be used in-game!");
+		ReplyToCommand(iClient, "Este comando so funciona dentro do jogo.");
 		return Plugin_Handled;
 	}
 	
@@ -884,7 +873,7 @@ public Action ShowPadsInfoCmd(int iClient, int nArgs)
 {
 	if (!iClient)
 	{
-		ReplyToCommand(iClient, "This command can only be used in-game!");
+		ReplyToCommand(iClient, "Este comando so funciona dentro do jogo.");
 		return Plugin_Handled;
 	}
 	

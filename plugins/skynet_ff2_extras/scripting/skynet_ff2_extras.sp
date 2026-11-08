@@ -28,6 +28,12 @@
 //   "damage force reduction" on the boss (skynet_ff2_boss_empurrao, 0.5 = half the normal knockback).
 // 1.2.3: a boss melee hit on an Engineer building (sentry, dispenser, teleporter) deals a fixed 195
 //   (skynet_ff2_boss_predio; no crit on top).
+// 1.2.4: summons (players who spawn on the boss team to help it) never crit: no melee/sniper/uber crits from this
+//   plugin, crit conditions are removed and crit damage is turned into normal damage (skynet_ff2_lacaio_critico 0).
+// 1.2.5: the uber crits are applied by a 0.2 s check (any player in the normal uber gets Kritz while it lasts),
+//   no longer depending on the condition-added forward.
+// 1.2.6: damage on the boss as a % of its full health (per life): backstab 7%, stomp 5% and the Market Gardener
+//   while rocket jumping 5% (skynet_ff2_backstab_pct / skynet_ff2_stomp_pct / skynet_ff2_market_pct; 0 = FF2's own).
 #include <sourcemod>
 #include <sdktools>
 #include <sdkhooks>
@@ -42,7 +48,7 @@ public Plugin myinfo =
     name        = "SKYNET FF2 Extras",
     author      = "SKYNET GAMING",
     description = "FF2: som no fim da rodada, melee critico, escudos resistem e stomp no boss",
-    version     = "1.2.3",
+    version     = "1.2.6",
     url         = "https://github.com/luci-immerstark/skynet-sourcemod-plugins"
 };
 
@@ -54,6 +60,8 @@ ConVar g_cvSom, g_cvCrit, g_cvEscudo, g_cvStomp, g_cvStompDano, g_cvSilencia, g_
 bool g_bNoAr[MAXPLAYERS + 1];
 int g_iArmaAnt[MAXPLAYERS + 1];
 float g_fProxAtq[MAXPLAYERS + 1];
+ConVar g_cvLacaioCrit;
+ConVar g_cvPctStab, g_cvPctStomp, g_cvPctMarket;
 ConVar g_cvEscalar, g_cvEscalarDano, g_cvConfete, g_cvUberCrit, g_cvEscalarBoss, g_cvBossEmpurrao, g_cvBossPredio;
 bool g_bCritUber[MAXPLAYERS + 1];
 bool g_bEscalando;
@@ -86,6 +94,11 @@ public void OnPluginStart()
     g_cvBossPredio  = CreateConVar("skynet_ff2_boss_predio", "195", "Dano fixo de cada golpe corpo a corpo do boss em construcao do Engineer (0 = como o jogo)", _, true, 0.0);
     g_cvUberCrit    = CreateConVar("skynet_ff2_uber_critico", "1", "A uber normal da Medigun tambem da critico enquanto durar");
     g_cvConfete     = CreateConVar("skynet_ff2_stomp_confete", "bday_confetti", "Efeito que sai da cabeca de quem foi pisado no stomp (vazio = nenhum). Ex.: bday_confetti, mini_fireworks");
+    g_cvLacaioCrit  = CreateConVar("skynet_ff2_lacaio_critico", "0", "Summons (players who spawn to help the boss) can crit (0 = never)");
+    g_cvPctStab     = CreateConVar("skynet_ff2_backstab_pct", "7", "Backstab no boss: % da vida cheia do boss (0 = dano do FF2)", _, true, 0.0, true, 100.0);
+    g_cvPctStomp    = CreateConVar("skynet_ff2_stomp_pct", "5", "Stomp no boss: % da vida cheia do boss (0 = dano do FF2)", _, true, 0.0, true, 100.0);
+    g_cvPctMarket   = CreateConVar("skynet_ff2_market_pct", "5", "Market Gardener no ar (rocket jump) no boss: % da vida cheia do boss (0 = dano normal)", _, true, 0.0, true, 100.0);
+    CreateTimer(0.2, T_UberCrit, _, TIMER_REPEAT);
     AutoExecConfig(true, "skynet_ff2_extras");
     HookEvent("player_team", Ev_Silencia, EventHookMode_Pre);
     HookEvent("player_changeclass", Ev_Silencia, EventHookMode_Pre);
@@ -172,6 +185,53 @@ bool EhBoss(int c)
     return c > 0 && c <= MaxClients && IsClientInGame(c) && FF2Ativo() && FF2R_GetBossData(c) != null;
 }
 
+// summon: a player on the boss team who is not a boss
+bool EhLacaio(int c)
+{
+    if (c < 1 || c > MaxClients || !IsClientInGame(c) || !FF2Ativo() || EhBoss(c))
+        return false;
+    int t = GetClientTeam(c);
+    for (int i = 1; i <= MaxClients; i++)
+        if (i != c && IsClientInGame(i) && GetClientTeam(i) == t && EhBoss(i))
+            return true;
+    return false;
+}
+
+// the boss's full health (one life), for the % damages
+float VidaCheia(int c)
+{
+    ConfigMap cfg = view_as<ConfigMap>(FF2R_GetBossData(c));
+    int v;
+    if (cfg == null || !cfg.GetInt("maxhealth", v) || v < 1)
+        v = GetClientHealth(c);
+    return float(v);
+}
+
+bool SemCritLacaio(int c)
+{
+    return !g_cvLacaioCrit.BoolValue && EhLacaio(c);
+}
+
+bool EhCondCrit(TFCond cond)
+{
+    switch (view_as<int>(cond))
+    {
+        case 11, 33, 34, 37, 38, 39, 40, 44, 56:    // Kritzkrieged, crit candy, canteen, first blood, win, capture, kill, Mmmph, on damage
+            return true;
+    }
+    return false;
+}
+
+public void F_TiraCritLacaio(DataPack dp)
+{
+    dp.Reset();
+    int c = GetClientOfUserId(dp.ReadCell());
+    TFCond cond = view_as<TFCond>(dp.ReadCell());
+    delete dp;
+    if (c && IsClientInGame(c) && TF2_IsPlayerInCondition(c, cond))
+        TF2_RemoveCondition(c, cond);
+}
+
 // ---------------------------------------------------------------- team/class change notices on the server only
 public Action Ev_Silencia(Event e, const char[] nome, bool sem)
 {
@@ -211,6 +271,11 @@ public void OnEntityCreated(int entity, const char[] classname)
 public Action OnDanoPredio(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon,
                            float damageForce[3], float damagePosition[3], int damagecustom)
 {
+    if ((damagetype & DMG_CRIT) && SemCritLacaio(attacker))
+    {
+        damagetype &= ~DMG_CRIT;            // summon crit on a building: normal damage
+        return Plugin_Changed;
+    }
     float fixo = g_cvBossPredio.FloatValue;
     if (fixo <= 0.0 || attacker < 1 || attacker > MaxClients || !EhBoss(attacker))
         return Plugin_Continue;
@@ -250,28 +315,39 @@ public Action T_Empurrao(Handle t, int uid)
 // ---------------------------------------------------------------- the Medigun's normal uber also gives crits
 public void TF2_OnConditionAdded(int client, TFCond cond)
 {
-    if (cond != TFCond_Ubercharged || !g_cvUberCrit.BoolValue || !FF2Ativo() || EhBoss(client))
-        return;
-    if (!TF2_IsPlayerInCondition(client, TFCond_Kritzkrieged))
+    if (EhCondCrit(cond) && SemCritLacaio(client))
     {
-        TF2_AddCondition(client, TFCond_Kritzkrieged, TFCondDuration_Infinite);
-        g_bCritUber[client] = true;
+        DataPack dp = new DataPack();
+        dp.WriteCell(GetClientUserId(client));
+        dp.WriteCell(view_as<int>(cond));
+        RequestFrame(F_TiraCritLacaio, dp);
+        return;
     }
 }
 
-public void TF2_OnConditionRemoved(int client, TFCond cond)
+// every 0.2 s: whoever is in the normal uber (Medic and patient) gets Kritz for a moment; it ends with the uber
+public Action T_UberCrit(Handle t)
 {
-    if (cond == TFCond_Ubercharged && g_bCritUber[client])
+    if (!g_cvUberCrit.BoolValue || !FF2Ativo())
+        return Plugin_Continue;
+    for (int c = 1; c <= MaxClients; c++)
     {
-        g_bCritUber[client] = false;
-        if (IsClientInGame(client))
-            TF2_RemoveCondition(client, TFCond_Kritzkrieged);
+        if (IsClientInGame(c) && IsPlayerAlive(c) && TF2_IsPlayerInCondition(c, TFCond_Ubercharged) && !EhBoss(c) && !SemCritLacaio(c))
+            TF2_AddCondition(c, TFCond_Kritzkrieged, 0.35);
     }
+    return Plugin_Continue;
 }
 
 // ---------------------------------------------------------------- melee always crits (except the boss)
 public Action TF2_CalcIsAttackCritical(int client, int weapon, char[] weaponname, bool &result)
 {
+    if (SemCritLacaio(client))
+    {
+        if (!result)
+            return Plugin_Continue;
+        result = false;
+        return Plugin_Changed;
+    }
     if (!g_cvCrit.BoolValue || result || !FF2Ativo() || EhBoss(client))
         return Plugin_Continue;
     if (weapon > MaxClients && weapon == GetPlayerWeaponSlot(client, TFWeaponSlot_Melee))
@@ -334,6 +410,21 @@ int AchaEscudo(int client)
 public Action OnDano(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon,
                      float damageForce[3], float damagePosition[3], int damagecustom)
 {
+    // backstab and Market Gardener in the air on the boss: fixed % of its full health (final damage, crit included)
+    if (attacker >= 1 && attacker <= MaxClients && attacker != victim && damage > 0.0 && EhBoss(victim) && !EhBoss(attacker))
+    {
+        float pct = 0.0;
+        if (damagecustom == TF_CUSTOM_BACKSTAB)
+            pct = g_cvPctStab.FloatValue;
+        else if (weapon > MaxClients && IsValidEntity(weapon) && HasEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex")
+                 && GetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex") == 416 && TF2_IsPlayerInCondition(attacker, TFCond_BlastJumping))
+            pct = g_cvPctMarket.FloatValue;
+        if (pct > 0.0)
+        {
+            damage = VidaCheia(victim) * pct / 100.0;
+            return Plugin_Changed;
+        }
+    }
     if (!g_cvEscudo.BoolValue || damage <= 0.0 || !(damagetype & (DMG_CLUB | DMG_SLASH)))
         return Plugin_Continue;
     if (!EhBoss(attacker) || EhBoss(victim))
@@ -381,8 +472,13 @@ public Action OnDanoPre(int victim, int &attacker, int &inflictor, float &damage
         }
         return Plugin_Continue;
     }
+    if ((damagetype & DMG_CRIT) && attacker != victim && SemCritLacaio(attacker))
+    {
+        damagetype &= ~DMG_CRIT;            // summon crit: normal damage
+        return Plugin_Changed;
+    }
     if (g_cvSniper.BoolValue && !(damagetype & DMG_CRIT) && attacker >= 1 && attacker <= MaxClients && attacker != victim
-        && weapon > MaxClients && IsValidEntity(weapon) && !EhBoss(attacker) && IsClientInGame(attacker))
+        && weapon > MaxClients && IsValidEntity(weapon) && !EhBoss(attacker) && !SemCritLacaio(attacker) && IsClientInGame(attacker))
     {
         char cls[48];
         GetEntityClassname(weapon, cls, sizeof(cls));
@@ -607,6 +703,8 @@ bool Stomp(int atk, int vit, bool agendado = false)
     }
     g_fUltimoStomp[atk] = agora;
     float dano = bonus + mult * float(GetClientHealth(vit));
+    if (EhBoss(vit) && g_cvPctStomp.FloatValue > 0.0)
+        dano = VidaCheia(vit) * g_cvPctStomp.FloatValue / 100.0;   // stomp on the boss: % of its full health
     int protecao = 0;                               // 1 = shield, 2 = Razorback: holds the boss stomp and breaks
     if (!EhBoss(vit) && g_cvEscudo.BoolValue)
     {

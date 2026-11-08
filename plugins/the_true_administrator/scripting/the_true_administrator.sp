@@ -139,6 +139,31 @@ public Action:FF2_OnAbility2(boss, const String:plugin_name[], const String:abil
 	if(!FF2_IsFF2Enabled() || FF2_GetRoundState()!=1)
 		return Plugin_Continue; // Because some FF2 forks still allow RAGE to be activated when the round is over....
 	
+	// SKYNET: without the AMS menu, the normal rage triggers the ability directly
+	new client=GetClientOfUserId(FF2_GetBossUserId(boss));
+	if(client<=0 || AMS_IsSubabilityReady(boss, this_plugin_name, ability_name))
+		return Plugin_Continue;
+	
+	if(!strcmp(ability_name, SCOUT_SUMMONING))
+		SUM1_Invoke(client);
+	else if(!strcmp(ability_name, SOLDIER_SUMMONING))
+		SUM2_Invoke(client);
+	else if(!strcmp(ability_name, PYRO_SUMMONING))
+		SUM3_Invoke(client);
+	else if(!strcmp(ability_name, DEMOMAN_SUMMONING))
+		SUM4_Invoke(client);
+	else if(!strcmp(ability_name, HEAVY_SUMMONING))
+		SUM5_Invoke(client);
+	else if(!strcmp(ability_name, ENGINEER_SUMMONING))
+		SUM6_Invoke(client);
+	else if(!strcmp(ability_name, MEDIC_SUMMONING))
+		SUM7_Invoke(client);
+	else if(!strcmp(ability_name, SNIPER_SUMMONING))
+		SUM8_Invoke(client);
+	else if(!strcmp(ability_name, SPY_SUMMONING))
+		SUM9_Invoke(client);
+	else if(!strcmp(ability_name, ULTIMATE_SUMMONING))
+		SU10_Invoke(client);
 	return Plugin_Continue;
 }
 

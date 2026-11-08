@@ -149,7 +149,7 @@ Install in `addons/sourcemod/plugins/freaks/`. Each one adds abilities that the 
 | [special_ams_overlay](plugins/special_ams_overlay/) | M76030 | 1.0.0 | The stock `rage_overlay`, compatible with AMS. |
 | [special_noanims](plugins/special_noanims/) | RainBolt Dash, Wliu | 1.10.8 | New weapon on rage and a boss with no animations. |
 | [special_stipper](plugins/special_stipper/) | M7 | 1.0 | `rage_staring_at_sexiness`. |
-| [the_true_administrator](plugins/the_true_administrator/) | M7 | 1.0 | Abilities of The True Administrator boss. |
+| [the_true_administrator](plugins/the_true_administrator/) | M7 | 1.0 | Abilities of The True Administrator boss. Our patch: the normal rage triggers the abilities directly, without the AMS menu. |
 
 ### SKYNET plugins
 
@@ -157,7 +157,7 @@ Made by us for the server. Install in `addons/sourcemod/plugins/`. In-game messa
 
 | Plugin | Version | What it does | Commands and cvars |
 |---|---|---|---|
-| [skynet_ff2_extras](plugins/skynet_ff2_extras/) | 1.2.3 | FF2 tweaks: end-of-round sound, melee crits, the Demoman shield and Razorback survive the stomp (the item breaks, the player lives), stomping the boss, uber gives crits, melee wall climbing for some bosses, less knockback on the boss and fixed boss damage to buildings. | `skynet_ff2_stomp*`, `skynet_ff2_escudos`, `skynet_ff2_uber_critico`, `skynet_ff2_escalar*`, `skynet_ff2_boss_empurrao`, `skynet_ff2_boss_predio`, `skynet_ff2_melee_critico`, `skynet_ff2_sniper_critico`, `skynet_ff2_som_vitoria` |
+| [skynet_ff2_extras](plugins/skynet_ff2_extras/) | 1.2.6 | FF2 tweaks: end-of-round sound, melee crits, the Demoman shield and Razorback survive the stomp (the item breaks, the player lives), stomping the boss, uber gives crits (Medic and patient), summons never crit, backstab / stomp / Market Gardener in the air deal a fixed % of the boss's full health, melee wall climbing for some bosses, less knockback on the boss and fixed boss damage to buildings. | `skynet_ff2_stomp*`, `skynet_ff2_escudos`, `skynet_ff2_uber_critico`, `skynet_ff2_lacaio_critico`, `skynet_ff2_backstab_pct`, `skynet_ff2_stomp_pct`, `skynet_ff2_market_pct`, `skynet_ff2_escalar*`, `skynet_ff2_boss_empurrao`, `skynet_ff2_boss_predio`, `skynet_ff2_melee_critico`, `skynet_ff2_sniper_critico`, `skynet_ff2_som_vitoria` |
 | [skynet_ff2_fila](plugins/skynet_ff2_fila/) | 1.1.0 | Fair boss queue: whoever waits longest becomes the boss. | `!fila` |
 | [skynet_ff2_rodizio](plugins/skynet_ff2_rodizio/) | 1.1.0 | The round's boss does not repeat within the last N rounds (saved in `data/skynet_ff2_rodizio.txt`). | `!rodizio`, `skynet_ff2_rodizio`, `skynet_ff2_rodizio_duo_min` |
 | [skynet_ff2_flecha](plugins/skynet_ff2_flecha/) | 1.1.0 | The Medic's crossbow bolt explodes, with a damage cap per shot on each target. | `skynet_ff2_flecha`, `skynet_ff2_flecha_dano`, `skynet_ff2_flecha_raio`, `skynet_ff2_flecha_max` |
@@ -188,7 +188,7 @@ Install in `addons/sourcemod/plugins/`.
 | Plugin | Author | Version | What it does |
 |---|---|---|---|
 | [ams_redux](plugins/ams_redux/) | sarysa, rework by 01Pollux | — | AMS (Ability Management System): lets the boss have several rages and choose which one to use. |
-| [engipads](plugins/engipads/) | Starblaster 64 | 1.1.0 | The Engineer can swap the teleporter for jump and speed pads. Source with our 64-bit fixes. |
+| [engipads](plugins/engipads/) | Starblaster 64 | 1.1.0 | The Engineer can swap the teleporter for jump and speed pads. Source with our 64-bit fixes; no version/credits announcement (only the `/pad` tip) and the messages in Portuguese for every client language. |
 | [advertisements](plugins/advertisements/) | Tsunami | 2.1.2 | Automatic chat messages, read from `configs/advertisements.txt`. |
 | [hlstatsx](plugins/hlstatsx/) | psychonic | 1.6.19 | In-game commands for HLstatsX CE (rank, top, etc.). |
 | [superlogs-tf2](plugins/superlogs-tf2/) | Thomas "CmptrWz" Berezansky, psychonic | 2.0.32-skynet1 | Extra TF2 logging for HLstatsX. Our build has fixes for the current server. |
