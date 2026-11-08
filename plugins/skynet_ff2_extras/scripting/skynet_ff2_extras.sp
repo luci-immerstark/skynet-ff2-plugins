@@ -32,6 +32,7 @@
 //   plugin, crit conditions are removed and crit damage is turned into normal damage (skynet_ff2_lacaio_critico 0).
 // 1.2.5: the uber crits are applied by a 0.2 s check (any player in the normal uber gets Kritz while it lasts),
 //   no longer depending on the condition-added forward.
+// 1.2.7: the % damages use the boss's total health (one life x number of lives).
 // 1.2.6: damage on the boss as a % of its full health (per life): backstab 7%, stomp 5% and the Market Gardener
 //   while rocket jumping 5% (skynet_ff2_backstab_pct / skynet_ff2_stomp_pct / skynet_ff2_market_pct; 0 = FF2's own).
 #include <sourcemod>
@@ -48,7 +49,7 @@ public Plugin myinfo =
     name        = "SKYNET FF2 Extras",
     author      = "SKYNET GAMING",
     description = "FF2: som no fim da rodada, melee critico, escudos resistem e stomp no boss",
-    version     = "1.2.6",
+    version     = "1.2.7",
     url         = "https://github.com/luci-immerstark/skynet-sourcemod-plugins"
 };
 
@@ -197,14 +198,16 @@ bool EhLacaio(int c)
     return false;
 }
 
-// the boss's full health (one life), for the % damages
+// the boss's total full health (one life x number of lives), for the % damages
 float VidaCheia(int c)
 {
     ConfigMap cfg = view_as<ConfigMap>(FF2R_GetBossData(c));
-    int v;
+    int v, vidas;
     if (cfg == null || !cfg.GetInt("maxhealth", v) || v < 1)
         v = GetClientHealth(c);
-    return float(v);
+    if (cfg == null || !cfg.GetInt("lives", vidas) || vidas < 1)
+        vidas = 1;
+    return float(v) * float(vidas);
 }
 
 bool SemCritLacaio(int c)
