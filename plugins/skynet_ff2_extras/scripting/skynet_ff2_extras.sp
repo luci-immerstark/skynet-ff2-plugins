@@ -32,8 +32,8 @@
 //   plugin, crit conditions are removed and crit damage is turned into normal damage (skynet_ff2_lacaio_critico 0).
 // 1.2.5: the uber crits are applied by a 0.2 s check (any player in the normal uber gets Kritz while it lasts),
 //   no longer depending on the condition-added forward.
-// 1.2.8: backstab, Market Gardener and stomp on the boss always take exactly their % (TF2 resistances could change
-//   the backstab/market hit after our hook; the difference is now fixed right after the hit);
+// 1.2.8: backstab, Market Gardener and stomp on the boss always take exactly their %: crits, minicrits (last players,
+//   buffs) and resistances no longer change them (set in the Alive hook and checked/fixed right after the hit);
 //   skynet_ff2_dano_debug 1 shows asked x applied for each of these hits in chat, for testing.
 //   New defaults: backstab 10%, stomp 8%, Market Gardener 8%.
 // 1.2.7: the % damages use the boss's total health (one life x number of lives).
@@ -67,7 +67,7 @@ int g_iArmaAnt[MAXPLAYERS + 1];
 float g_fProxAtq[MAXPLAYERS + 1];
 ConVar g_cvLacaioCrit;
 ConVar g_cvPctStab, g_cvPctStomp, g_cvPctMarket, g_cvDanoDebug;
-float g_fPedido[MAXPLAYERS + 1];
+float g_fPedido[MAXPLAYERS + 1], g_fStompPedido[MAXPLAYERS + 1];
 int g_iVidaAntes[MAXPLAYERS + 1];
 char g_sGolpe[MAXPLAYERS + 1][16];
 ConVar g_cvEscalar, g_cvEscalarDano, g_cvConfete, g_cvUberCrit, g_cvEscalarBoss, g_cvBossEmpurrao, g_cvBossPredio;
@@ -424,6 +424,13 @@ public Action OnDano(int victim, int &attacker, int &inflictor, float &damage, i
                      float damageForce[3], float damagePosition[3], int damagecustom)
 {
     g_fPedido[victim] = 0.0;
+    // our stomp on the boss: exactly the % asked, without the crit/minicrit TF2 put on top
+    if (g_fStompPedido[victim] > 0.0 && (damagetype & DMG_CRUSH))
+    {
+        damage = g_fStompPedido[victim];
+        damagetype &= ~DMG_CRIT;
+        return Plugin_Changed;
+    }
     // backstab and Market Gardener in the air on the boss: fixed % of its total health. The damage here already has
     //   the crit in it; the crit flag is cleared so crit resistances don't touch the %, and OnDanoPost fixes any rest
     if (attacker >= 1 && attacker <= MaxClients && attacker != victim && damage > 0.0 && EhBoss(victim) && !EhBoss(attacker))
@@ -748,8 +755,12 @@ bool Stomp(int atk, int vit, bool agendado = false)
     if (protecao == 0)
     {
         int antes = GetClientHealth(vit);
+        bool boss = EhBoss(vit);
+        if (boss)
+            g_fStompPedido[vit] = dano;
         SDKHooks_TakeDamage(vit, atk, atk, dano, DMG_PREVENT_PHYSICS_FORCE | DMG_CRUSH);
-        if (EhBoss(vit))
+        g_fStompPedido[vit] = 0.0;
+        if (boss)
             AcertaDano("Stomp", vit, atk, dano, antes);
     }
     if (pulo > 0.0)
