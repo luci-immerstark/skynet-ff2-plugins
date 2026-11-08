@@ -32,6 +32,9 @@
 //   plugin, crit conditions are removed and crit damage is turned into normal damage (skynet_ff2_lacaio_critico 0).
 // 1.2.5: the uber crits are applied by a 0.2 s check (any player in the normal uber gets Kritz while it lasts),
 //   no longer depending on the condition-added forward.
+// 1.2.8: backstab, Market Gardener and stomp on the boss always take exactly their % (TF2 resistances could change
+//   the backstab/market hit after our hook; the difference is now fixed right after the hit);
+//   skynet_ff2_dano_debug 1 shows asked x applied for each of these hits in chat, for testing.
 // 1.2.7: the % damages use the boss's total health (one life x number of lives).
 // 1.2.6: damage on the boss as a % of its full health (per life): backstab 7%, stomp 5% and the Market Gardener
 //   while rocket jumping 5% (skynet_ff2_backstab_pct / skynet_ff2_stomp_pct / skynet_ff2_market_pct; 0 = FF2's own).
@@ -49,7 +52,7 @@ public Plugin myinfo =
     name        = "SKYNET FF2 Extras",
     author      = "SKYNET GAMING",
     description = "FF2: som no fim da rodada, melee critico, escudos resistem e stomp no boss",
-    version     = "1.2.7",
+    version     = "1.2.8",
     url         = "https://github.com/luci-immerstark/skynet-sourcemod-plugins"
 };
 
@@ -62,7 +65,10 @@ bool g_bNoAr[MAXPLAYERS + 1];
 int g_iArmaAnt[MAXPLAYERS + 1];
 float g_fProxAtq[MAXPLAYERS + 1];
 ConVar g_cvLacaioCrit;
-ConVar g_cvPctStab, g_cvPctStomp, g_cvPctMarket;
+ConVar g_cvPctStab, g_cvPctStomp, g_cvPctMarket, g_cvDanoDebug;
+float g_fPedido[MAXPLAYERS + 1];
+int g_iVidaAntes[MAXPLAYERS + 1];
+char g_sGolpe[MAXPLAYERS + 1][16];
 ConVar g_cvEscalar, g_cvEscalarDano, g_cvConfete, g_cvUberCrit, g_cvEscalarBoss, g_cvBossEmpurrao, g_cvBossPredio;
 bool g_bCritUber[MAXPLAYERS + 1];
 bool g_bEscalando;
@@ -99,6 +105,7 @@ public void OnPluginStart()
     g_cvPctStab     = CreateConVar("skynet_ff2_backstab_pct", "7", "Backstab no boss: % da vida cheia do boss (0 = dano do FF2)", _, true, 0.0, true, 100.0);
     g_cvPctStomp    = CreateConVar("skynet_ff2_stomp_pct", "5", "Stomp no boss: % da vida cheia do boss (0 = dano do FF2)", _, true, 0.0, true, 100.0);
     g_cvPctMarket   = CreateConVar("skynet_ff2_market_pct", "5", "Market Gardener no ar (rocket jump) no boss: % da vida cheia do boss (0 = dano normal)", _, true, 0.0, true, 100.0);
+    g_cvDanoDebug   = CreateConVar("skynet_ff2_dano_debug", "0", "1 = mostra no chat o dano de cada facada/stomp/market no boss (para teste)", _, true, 0.0, true, 1.0);
     CreateTimer(0.2, T_UberCrit, _, TIMER_REPEAT);
     AutoExecConfig(true, "skynet_ff2_extras");
     HookEvent("player_team", Ev_Silencia, EventHookMode_Pre);
@@ -128,6 +135,8 @@ public void OnClientPutInServer(int client)
     g_bCritUber[client] = false;
     SDKHook(client, SDKHook_OnTakeDamage, OnDanoPre);
     SDKHook(client, SDKHook_OnTakeDamageAlive, OnDano);
+    SDKHook(client, SDKHook_OnTakeDamageAlivePost, OnDanoPost);
+    g_fPedido[client] = 0.0;
 }
 
 public void OnMapStart()
@@ -413,7 +422,9 @@ int AchaEscudo(int client)
 public Action OnDano(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon,
                      float damageForce[3], float damagePosition[3], int damagecustom)
 {
-    // backstab and Market Gardener in the air on the boss: fixed % of its full health (final damage, crit included)
+    g_fPedido[victim] = 0.0;
+    // backstab and Market Gardener in the air on the boss: fixed % of its total health. The damage here already has
+    //   the crit in it; the crit flag is cleared so crit resistances don't touch the %, and OnDanoPost fixes any rest
     if (attacker >= 1 && attacker <= MaxClients && attacker != victim && damage > 0.0 && EhBoss(victim) && !EhBoss(attacker))
     {
         float pct = 0.0;
@@ -425,6 +436,10 @@ public Action OnDano(int victim, int &attacker, int &inflictor, float &damage, i
         if (pct > 0.0)
         {
             damage = VidaCheia(victim) * pct / 100.0;
+            damagetype &= ~DMG_CRIT;
+            g_fPedido[victim] = damage;
+            g_iVidaAntes[victim] = GetClientHealth(victim);
+            strcopy(g_sGolpe[victim], sizeof(g_sGolpe[]), damagecustom == TF_CUSTOM_BACKSTAB ? "Facada" : "Market");
             return Plugin_Changed;
         }
     }
@@ -730,7 +745,12 @@ bool Stomp(int atk, int vit, bool agendado = false)
         }
     }
     if (protecao == 0)
+    {
+        int antes = GetClientHealth(vit);
         SDKHooks_TakeDamage(vit, atk, atk, dano, DMG_PREVENT_PHYSICS_FORCE | DMG_CRUSH);
+        if (EhBoss(vit))
+            AcertaDano("Stomp", vit, atk, dano, antes);
+    }
     if (pulo > 0.0)
     {
         float v[3];
@@ -771,4 +791,40 @@ bool Stomp(int atk, int vit, bool agendado = false)
     else
         PrintCenterText(vit, "O boss pisou na sua cabeca!");
     return true;
+}
+
+// makes the boss lose exactly the asked damage (TF2 can still change it a little after our hook: crit/melee
+//   resistances work on its own split of the hit) and, with skynet_ff2_dano_debug 1, shows asked x applied in chat
+void AcertaDano(const char[] golpe, int boss, int atk, float pedido, int antes)
+{
+    if (!IsClientInGame(boss) || !IsPlayerAlive(boss))
+        return;
+    int depois = GetClientHealth(boss);
+    float pct = pedido * 100.0 / VidaCheia(boss);
+    if (depois > antes)
+    {
+        if (g_cvDanoDebug.BoolValue)
+            PrintToChatAll("\x04[DANO]\x01 %s: pedido %.0f (%.1f%%) - o boss trocou de vida", golpe, pedido, pct);
+        return;
+    }
+    int alvo = RoundToNearest(pedido);
+    int falta = alvo - (antes - depois);
+    if (g_cvDanoDebug.BoolValue)
+        PrintToChatAll("\x04[DANO]\x01 %s: pedido %d (%.1f%%), o jogo aplicou %d%s", golpe, alvo, pct, antes - depois, (falta > 1 || falta < -1) ? " -> corrigido" : "");
+    if (falta <= 1 && falta >= -1)
+        return;
+    if (depois - falta >= 1)
+        SetEntityHealth(boss, depois - falta);
+    else if (atk >= 1 && atk <= MaxClients && IsClientInGame(atk))
+        SDKHooks_TakeDamage(boss, atk, atk, float(falta), DMG_PREVENT_PHYSICS_FORCE);   // the rest ends this life: FF2 handles lives/kill
+}
+
+public void OnDanoPost(int victim, int attacker, int inflictor, float damage, int damagetype, int weapon,
+                       const float damageForce[3], const float damagePosition[3], int damagecustom)
+{
+    if (g_fPedido[victim] <= 0.0)
+        return;
+    float pedido = g_fPedido[victim];
+    g_fPedido[victim] = 0.0;
+    AcertaDano(g_sGolpe[victim], victim, attacker, pedido, g_iVidaAntes[victim]);
 }
