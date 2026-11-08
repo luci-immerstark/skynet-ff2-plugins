@@ -1,6 +1,7 @@
 // SKYNET Metal Regen: the Engineer gains metal little by little (in FF2 he spends the round running, with no time to fetch metal).
-//   Cvars: skynet_metal (1 = on), skynet_metal_qtd (10 each time), skynet_metal_intervalo (1.0 s), skynet_metal_max (200).
+//   Cvars: skynet_metal (1 = on), skynet_metal_qtd (5 each time), skynet_metal_intervalo (1.0 s), skynet_metal_max (200).
 //   In FF2, the boss does not get it.
+// 1.0.1: 5 metal per second by default (was 10).
 #include <sourcemod>
 #include <sdktools>
 #include <tf2>
@@ -13,7 +14,7 @@ public Plugin myinfo =
     name        = "SKYNET Metal Regen",
     author      = "SKYNET GAMING",
     description = "Engineer regenera metal aos poucos",
-    version     = "1.0.0",
+    version     = "1.0.1",
     url         = "https://github.com/luci-immerstark/skynet-sourcemod-plugins"
 };
 
@@ -33,7 +34,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 public void OnPluginStart()
 {
     g_cvLiga      = CreateConVar("skynet_metal", "1", "Engineer regenera metal (1 = sim)", _, true, 0.0, true, 1.0);
-    g_cvQtd       = CreateConVar("skynet_metal_qtd", "10", "Metal ganho por vez", _, true, 1.0, true, 200.0);
+    g_cvQtd       = CreateConVar("skynet_metal_qtd", "5", "Metal ganho por vez", _, true, 1.0, true, 200.0);
     g_cvIntervalo = CreateConVar("skynet_metal_intervalo", "1.0", "Segundos entre cada ganho", _, true, 0.1, true, 30.0);
     g_cvMax       = CreateConVar("skynet_metal_max", "200", "Metal maximo que a regeneracao enche", _, true, 1.0, true, 1000.0);
     g_cvIntervalo.AddChangeHook(OnIntervalo);

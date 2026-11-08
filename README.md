@@ -170,7 +170,7 @@ Made by us for the server. Install in `addons/sourcemod/plugins/`. In-game messa
 | [skynet_terceira](plugins/skynet_terceira/) | 1.0.0 | Play in third person. | `!tp`, `!fp` |
 | [skynet_killstreak](plugins/skynet_killstreak/) | 1.0.0 | Professional Killstreak on every weapon, with a choice of sheen and effect. | `!killstreak`, `!ks` |
 | [skynet_amp](plugins/skynet_amp/) | 1.1.0 | The Engineer's Dispenser can become an Amplifier: gives crits to nearby allies. | `!amp`, `skynet_amp*` |
-| [skynet_metal](plugins/skynet_metal/) | 1.0.0 | The Engineer regenerates metal over time. | `skynet_metal`, `skynet_metal_qtd`, `skynet_metal_intervalo`, `skynet_metal_max` |
+| [skynet_metal](plugins/skynet_metal/) | 1.0.1 | The Engineer regenerates metal over time (5 per second by default). | `skynet_metal`, `skynet_metal_qtd`, `skynet_metal_intervalo`, `skynet_metal_max` |
 | [skynet_dissolve](plugins/skynet_dissolve/) | 1.0.0 | Dead bodies dissolve (original idea by L. Duke). | `sm_dissolve`, `sm_dissolve_delay`, `sm_dissolve_type` |
 | [skynet_sprays](plugins/skynet_sprays/) | 1.0.0 | Shows who made a spray and lets admins block offensive sprays. | `!quemspray`, `sm_spraytrace`, `sm_sprayban`, `sm_sprayunban` |
 | [skynet_admtag](plugins/skynet_admtag/) | 1.3 | Chat tag: gold `[ADM]`, blue `[MOD]` and purple `[VIP]`, based on admin flags. | — |
