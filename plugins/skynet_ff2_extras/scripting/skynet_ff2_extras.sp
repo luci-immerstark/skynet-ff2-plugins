@@ -32,6 +32,8 @@
 //   plugin, crit conditions are removed and crit damage is turned into normal damage (skynet_ff2_lacaio_critico 0).
 // 1.2.5: the uber crits are applied by a 0.2 s check (any player in the normal uber gets Kritz while it lasts),
 //   no longer depending on the condition-added forward.
+// 1.2.9: the uber crits follow the Medic's heal target (switch patients and the crit goes with the uber; back to
+//   the first one, it comes back); skynet_ff2_air keeps sv_airaccelerate (500) on every map.
 // 1.2.8: backstab, Market Gardener and stomp on the boss always take exactly their %: crits, minicrits (last players,
 //   buffs) and resistances no longer change them (set in the Alive hook and checked/fixed right after the hit);
 //   skynet_ff2_dano_debug 1 shows asked x applied for each of these hits in chat, for testing.
@@ -53,7 +55,7 @@ public Plugin myinfo =
     name        = "SKYNET FF2 Extras",
     author      = "SKYNET GAMING",
     description = "FF2: som no fim da rodada, melee critico, escudos resistem e stomp no boss",
-    version     = "1.2.8",
+    version     = "1.2.9",
     url         = "https://github.com/luci-immerstark/skynet-sourcemod-plugins"
 };
 
@@ -70,6 +72,7 @@ ConVar g_cvPctStab, g_cvPctStomp, g_cvPctMarket, g_cvDanoDebug;
 float g_fPedido[MAXPLAYERS + 1], g_fStompPedido[MAXPLAYERS + 1];
 int g_iVidaAntes[MAXPLAYERS + 1];
 char g_sGolpe[MAXPLAYERS + 1][16];
+ConVar g_cvAir;
 ConVar g_cvEscalar, g_cvEscalarDano, g_cvConfete, g_cvUberCrit, g_cvEscalarBoss, g_cvBossEmpurrao, g_cvBossPredio;
 bool g_bCritUber[MAXPLAYERS + 1];
 bool g_bEscalando;
@@ -107,7 +110,9 @@ public void OnPluginStart()
     g_cvPctStomp    = CreateConVar("skynet_ff2_stomp_pct", "8", "Stomp no boss: % da vida cheia do boss (0 = dano do FF2)", _, true, 0.0, true, 100.0);
     g_cvPctMarket   = CreateConVar("skynet_ff2_market_pct", "8", "Market Gardener no ar (rocket jump) no boss: % da vida cheia do boss (0 = dano normal)", _, true, 0.0, true, 100.0);
     g_cvDanoDebug   = CreateConVar("skynet_ff2_dano_debug", "0", "1 = mostra no chat o dano de cada facada/stomp/market no boss (para teste)", _, true, 0.0, true, 1.0);
-    CreateTimer(0.2, T_UberCrit, _, TIMER_REPEAT);
+    g_cvAir         = CreateConVar("skynet_ff2_air", "500", "Air strafe (sv_airaccelerate) aplicado em todo mapa (0 = nao mexe)", _, true, 0.0, true, 10000.0);
+    g_cvAir.AddChangeHook(MudouAir);
+    CreateTimer(0.1, T_UberCrit, _, TIMER_REPEAT);
     AutoExecConfig(true, "skynet_ff2_extras");
     HookEvent("player_team", Ev_Silencia, EventHookMode_Pre);
     HookEvent("player_changeclass", Ev_Silencia, EventHookMode_Pre);
@@ -338,17 +343,58 @@ public void TF2_OnConditionAdded(int client, TFCond cond)
     }
 }
 
-// every 0.2 s: whoever is in the normal uber (Medic and patient) gets Kritz for a moment; it ends with the uber
+// every 0.1 s: a Medic with the normal uber running gives Kritz to himself and to whoever he is healing right now, so
+//   the crit follows the uber when he switches patients (and comes back when he heals the first one again); anyone in
+//   the normal uber also keeps it while the uber lasts
 public Action T_UberCrit(Handle t)
 {
     if (!g_cvUberCrit.BoolValue || !FF2Ativo())
         return Plugin_Continue;
     for (int c = 1; c <= MaxClients; c++)
     {
-        if (IsClientInGame(c) && IsPlayerAlive(c) && TF2_IsPlayerInCondition(c, TFCond_Ubercharged) && !EhBoss(c) && !SemCritLacaio(c))
-            TF2_AddCondition(c, TFCond_Kritzkrieged, 0.35);
+        if (!IsClientInGame(c) || !IsPlayerAlive(c) || EhBoss(c))
+            continue;
+        if (TF2_IsPlayerInCondition(c, TFCond_Ubercharged))
+            DaCritUber(c);
+        if (TF2_GetPlayerClass(c) != TFClass_Medic)
+            continue;
+        int arma = GetPlayerWeaponSlot(c, TFWeaponSlot_Secondary);
+        if (arma <= MaxClients || !HasEntProp(arma, Prop_Send, "m_bChargeRelease") || !GetEntProp(arma, Prop_Send, "m_bChargeRelease"))
+            continue;
+        int idx = GetEntProp(arma, Prop_Send, "m_iItemDefinitionIndex");
+        if (idx == 35 || idx == 411 || idx == 998)      // Kritzkrieg (already crits), Quick-Fix, Vaccinator: not the normal uber
+            continue;
+        DaCritUber(c);
+        int alvo = GetEntPropEnt(arma, Prop_Send, "m_hHealingTarget");
+        if (alvo >= 1 && alvo <= MaxClients && alvo != c && IsClientInGame(alvo) && IsPlayerAlive(alvo) && !EhBoss(alvo))
+            DaCritUber(alvo);
     }
     return Plugin_Continue;
+}
+
+void DaCritUber(int c)
+{
+    if (!SemCritLacaio(c))
+        TF2_AddCondition(c, TFCond_Kritzkrieged, 0.25);
+}
+
+// ---------------------------------------------------------------- air strafe kept on every map
+public void OnConfigsExecuted()
+{
+    AplicaAir();
+}
+
+public void MudouAir(ConVar cv, const char[] antes, const char[] agora)
+{
+    AplicaAir();
+}
+
+void AplicaAir()
+{
+    int v = g_cvAir.IntValue;
+    ConVar air = FindConVar("sv_airaccelerate");
+    if (v > 0 && air != null && air.IntValue != v)
+        air.SetInt(v);
 }
 
 // ---------------------------------------------------------------- melee always crits (except the boss)
